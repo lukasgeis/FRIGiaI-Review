@@ -1,0 +1,49 @@
+# We interleave 32-bit / 64-bit results. 
+# The array size comes first, then we present columns of timings. 
+# First column uses an OpenBSD-like approach with two divisions per ranged random number.
+# Second column uses a Java-like approach with one or more divisions per ranged random number.
+# Third column uses an approach with nearly no division per ranged random number.
+# Fourth column uses an approach based on floating-point numbers.
+# Fifth column uses precomputed random indexes.
+# Next column relates to std::shuffle (the standard library).
+# Next column uses an OpenBSD-like approach with two divisions per ranged random number with the numbers written to a buffer.
+# Next column uses a Java-like approach with one or more divisions per ranged random number with the numbers written to a buffer.
+# Next column uses an approach with nearly no division per ranged random number with the numbers written to a buffer.
+# Next column uses an approach based on floating-point numbers with the numbers written to a buffer.
+# Time reported in number of ns per array element in a random shuffle.
+5   6.40   6.12   5.72   6.16   4.16   6.32        6.40   6.28   6.12   6.24 
+5   6.88   5.52   5.48   5.32   4.72   5.04        7.00   5.60   5.44   5.92 
+10   4.20   3.28   3.04   3.30   2.42   3.42        4.26   3.48   3.24   3.62 
+10   5.58   3.66   3.40   3.48   2.50   2.98        5.62   3.84   3.26   3.68 
+50   3.14   1.81   1.71   1.74   1.02   1.82        3.14   1.95   1.82   1.77 
+50   4.48   2.44   1.81   1.94   0.98   1.48        4.50   2.46   1.66   1.79 
+100   3.02   1.68   1.56   1.59   0.81   1.64        3.01   1.86   1.74   1.66 
+100   4.37   2.29   1.76   1.66   0.76   1.30        4.38   2.30   1.48   1.66 
+500   3.05   1.67   1.54   1.48   0.61   1.46        3.22   2.09   1.75   1.67 
+500   4.44   2.38   1.60   1.49   0.61   1.15        4.56   2.48   1.91   1.63 
+1000   3.00   1.59   1.60   1.38   0.58   1.44        3.27   1.92   1.79   1.70 
+1000   4.31   2.25   1.54   1.40   0.57   1.15        4.57   2.46   2.06   1.63 
+5000   2.90   1.48   1.42   1.25   0.51   1.43        3.31   1.90   1.79   1.70 
+5000   3.92   2.07   1.47   1.26   0.52   1.15        4.30   2.39   2.13   1.60 
+10000   2.87   1.53   1.41   1.85   1.22   1.49        3.32   1.91   1.81   1.72 
+10000   4.34   2.04   1.66   1.26   0.55   1.30        4.32   2.39   2.16   1.61 
+50000   3.01   1.54   1.39   1.41   0.88   3.25        4.21   2.17   1.96   1.87 
+50000   3.79   1.98   1.47   1.33   0.71   1.17        4.38   2.51   2.31   1.80 
+100000   3.01   1.68   1.40   1.34   0.75   2.50        3.49   2.10   1.98   1.91 
+100000   3.78   1.97   1.46   1.36   0.72   1.25        4.43   2.56   2.39   2.83 
+500000   2.90   1.84   1.45   1.98   1.17   3.08        3.73   2.38   2.25   2.21 
+500000   3.68   1.89   1.79   2.00   1.06   1.78        4.55   2.74   2.71   2.11 
+1000000   2.91   1.97   1.55   2.22   1.17   3.46        3.95   2.94   2.51   2.31 
+1000000   3.78   1.99   2.02   2.39   1.17   1.94        4.67   3.07   3.25   2.30 
+5000000   5.92   5.03   3.88   5.34   3.02   7.10        5.42   4.22   4.04   4.02 
+5000000   5.23   4.49   4.76   5.26   2.94   3.85        5.92   4.25   4.47   4.14 
+10000000   8.85   7.86   6.44   8.04   4.52   11.88        7.07   5.78   6.02   5.76 
+10000000   8.36   7.02   7.84   8.10   4.59   6.64        7.58   5.99   6.02   5.62 
+50000000   14.36   13.76   12.23   15.07   8.73   21.58        10.29   9.19   9.44   8.87 
+50000000   13.59   12.25   13.57   14.16   8.20   11.52        10.52   9.18   9.21   8.78 
+100000000   15.71   14.80   12.40   14.79   9.06   22.79        11.13   10.19   10.25   9.93 
+100000000   14.92   13.66   14.87   14.84   8.97   12.60        11.40   10.03   10.29   9.87 
+500000000   17.13   16.03   13.71   16.42   9.91   24.51        12.29   11.50   11.45   11.10 
+500000000   16.45   14.67   16.09   16.21   10.01   13.82        12.46   11.19   11.23   10.88 
+1000000000   17.85   16.88   14.62   16.80   10.40   26.15        13.01   11.86   12.33   11.42 
+1000000000   16.64   14.79   16.14   16.40   10.02   14.04        12.76   11.47   11.49   11.09 
