@@ -1,0 +1,249 @@
+@article{BASampling,
+  title = {Efficient generation of large random networks},
+  author = {Batagelj, Vladimir and Brandes, Ulrik},
+  journal = {Phys. Rev. E},
+  volume = {71},
+  issue = {3},
+  pages = {036113},
+  numpages = {5},
+  year = {2005},
+  month = {Mar},
+  publisher = {American Physical Society},
+  doi = {10.1103/PhysRevE.71.036113},
+  url = {https://link.aps.org/doi/10.1103/PhysRevE.71.036113}
+}
+
+@inbook{MathComp,
+    title={{Mathematics of Computation 1943--1993: a half-century of computational mathematics}},
+    booktitle={{Mathematics of Computation 1943--1993: a half-century of computational mathematics}},
+    editor={Walter Gautschi},
+    ISBN={0--8218--0291--7},
+    MR={95j:00014},
+    publisher={American Mathematical Society},
+    address={Providence},
+    year={1994},
+    pages={504,  "Perhaps Pocklington also deserves credit as the inventor of the randomized algorithm".}
+}
+
+@article{XS,
+    title={Xorshift RNGs},
+    volume={8},
+    url={https://www.jstatsoft.org/index.php/jss/article/view/v008i14},
+    doi={10.18637/jss.v008.i14},
+    abstract={Description of a class of simple, extremely fast random number generators (RNGs) with periods 2k - 1 for k = 32, 64, 96, 128, 160, 192. These RNGs seem to pass tests of randomness very well.},
+    number={14},
+    journal={Journal of Statistical Software},
+    author={Marsaglia, George},
+    year={2003},
+    pages={1-6}
+}
+
+@article{MT,
+    author = {Matsumoto, Makoto and Nishimura, Takuji},
+    title = {Mersenne Twister: A 623-Dimensionally Equidistributed Uniform Pseudo-Random Number Generator},
+    year = {1998},
+    issue_date = {Jan. 1998},
+    publisher = {Association for Computing Machinery},
+    address = {New York, NY, USA},
+    volume = {8},
+    number = {1},
+    issn = {1049-3301},
+    url = {https://doi.org/10.1145/272991.272995},
+    doi = {10.1145/272991.272995},
+    abstract = {A new algorithm called Mersenne Twister (MT) is proposed for generating uniform pseudorandom numbers. For a particular choice of parameters, the algorithm provides a super astronomical period of 219937 −1 and 623-dimensional equidistribution up to 32-bit accuracy, while using a working area of only 624 words. This is a new variant of the previously proposed generators, TGFSR, modified so as to admit a Mersenne-prime period. The characteristic polynomial has many terms. The distribution up to v bits accuracy for 1 ≤ v ≤ 32 is also shown to be good. An algorithm is also given that checks the primitivity of the characteristic polynomial of MT with computational complexity O(p2) where  p is the degree of the polynomial.We implemented this generator in portable C-code. It passed several stringent statistical tests, including diehard. Its speed is comparable to other modern generators. Its merits are due to the efficient algorithms that are unique to polynomial calculations over the two-element field.},
+    journal = {ACM Trans. Model. Comput. Simul.},
+    month = {jan},
+    pages = {3-30},
+    numpages = {28},
+    keywords = {primitive polynomials, Mersenne twister, GFSR, incomplete array, inversive-decimation method, MT19937, m-sequences, tempering, TGFSR, finite fields, k-distribution, random number generation, multiple-recursive matrix method, Mersenne primes}
+}
+
+@article{SC,
+    author = {George Marsaglia and Arif Zaman},
+    title = {{A New Class of Random Number Generators}},
+    volume = {1},
+    journal = {The Annals of Applied Probability},
+    number = {3},
+    publisher = {Institute of Mathematical Statistics},
+    pages = {462 -- 480},
+    keywords = {add-with-carry, lagged-Fibonacci, Monte Carlo, Random number generators, subtract-with-borrow},
+    year = {1991},
+    doi = {10.1214/aoap/1177005878},
+    URL = {https://doi.org/10.1214/aoap/1177005878}
+}
+
+@article{LM,
+    author = {Payne, W. H. and Rabung, J. R. and Bogyo, T. P.},
+    title = {Coding the Lehmer Pseudo-Random Number Generator},
+    year = {1969},
+    issue_date = {Feb. 1969},
+    publisher = {Association for Computing Machinery},
+    address = {New York, NY, USA},
+    volume = {12},
+    number = {2},
+    issn = {0001-0782},
+    url = {https://doi.org/10.1145/362848.362860},
+    doi = {10.1145/362848.362860},
+    abstract = {An algorithm and coding technique is presented for quick evaluation of the Lehmer pseudo-random number generator modulo 2 ** 31 - 1, a prime Mersenne number which produces 2 ** 31 - 2 numbers, on a p-bit (greater than 31) computer. The computation method is extendible to limited problems in modular arithmetic. Prime factorization for 2 ** 61 - 2 and a primitive root for 2 ** 61 - 1, the next largest prime Mersenne number, are given for possible construction of a pseudo-random number generator of increased cycle length.},
+    journal = {Commun. ACM},
+    month = {feb},
+    pages = {85-86},
+    numpages = {2},
+    keywords = {simulation, uniform probability density, primitive roots, modular arithmetic, prime factorization, random number, pseudo-random number, uniform frequency function}
+}
+
+@article{MINSTD,
+    author = {Park, S. K. and Miller, K. W.},
+    title = {Random Number Generators: Good Ones Are Hard to Find},
+    year = {1988},
+    issue_date = {Oct. 1988},
+    publisher = {Association for Computing Machinery},
+    address = {New York, NY, USA},
+    volume = {31},
+    number = {10},
+    issn = {0001-0782},
+    url = {https://doi.org/10.1145/63039.63042},
+    doi = {10.1145/63039.63042},
+    abstract = {Practical and theoretical issues are presented concerning the design, implementation, and use of a good, minimal standard random number generator that will port to virtually all systems.},
+    journal = {Commun. ACM},
+    month = {oct},
+    pages = {1192-1201},
+    numpages = {10}
+}
+
+@techreport{PCG,
+    title = "PCG: A Family of Simple Fast Space-Efficient Statistically Good Algorithms for Random Number Generation",
+    author = "Melissa E. O'Neill",
+    institution = "Harvey Mudd College",
+    address = "Claremont, CA",
+    number = "HMC-CS-2014-0905",
+    year = "2014",
+    month = Sep,
+    xurl = "https://www.cs.hmc.edu/tr/hmc-cs-2014-0905.pdf",
+}
+
+@techreport{CHA,
+    author      = "Daniel J. Bernstein",
+    institution = "The University of Illinois at Chicago",
+    title       = "ChaCha, a variant of Salsa20",
+    year        = "2008",
+    xurl        = "https://cr.yp.to/chacha.html"
+}
+
+
+@article{Lemire,
+   title={Fast Random Integer Generation in an Interval},
+   volume={29},
+   ISSN={1558-1195},
+   url={http://dx.doi.org/10.1145/3230636},
+   DOI={10.1145/3230636},
+   number={1},
+   journal={ACM Transactions on Modeling and Computer Simulation},
+   publisher={Association for Computing Machinery (ACM)},
+   author={Lemire, Daniel},
+   year={2019},
+   month=jan, pages={1-12}
+}
+
+@misc{Flips,
+      title={Optimal Discrete Uniform Generation from Coin Flips, and Applications}, 
+      author={Jérémie Lumbroso},
+      year={2013},
+      eprint={1304.1916},
+      archivePrefix={arXiv},
+      primaryClass={cs.DS}
+}
+
+@article{LinConGen,
+    author = {L'Ecuyer, Pierre},
+    year = {1999},
+    month = {01},
+    pages = {249-260},
+    title = {Tables of linear congruential generators of different sizes and good lattice structure},
+    volume = {68},
+    journal = {Math. Comput.},
+    doi = {10.1090/S0025-5718-99-00996-5}
+}
+
+@book{FY,
+  added-at = {2015-06-04T07:16:19.000+0200},
+  address = {Boston},
+  author = {Knuth, Donald E.},
+  biburl = {https://www.bibsonomy.org/bibtex/25dbc415549a1bb86bff7a3842765c31f/ytyoun},
+  edition = {Third},
+  interhash = {b825ccd550f92a93eefbacd1bec78704},
+  intrahash = {5dbc415549a1bb86bff7a3842765c31f},
+  isbn = {0201896842 9780201896848},
+  keywords = {algorithm knuth no.pdf taocp textbook},
+  publisher = {Addison-Wesley},
+  refid = {174763889},
+  timestamp = {2015-07-29T09:31:05.000+0200},
+  title = {The Art of Computer Programming, Volume 2: Seminumerical Algorithms},
+  year = 1997
+}
+
+@article{Reservoir,
+    author = {Vitter, Jeffrey S.},
+    title = {Random Sampling with a Reservoir},
+    year = {1985},
+    issue_date = {March 1985},
+    publisher = {Association for Computing Machinery},
+    address = {New York, NY, USA},
+    volume = {11},
+    number = {1},
+    issn = {0098-3500},
+    url = {https://doi.org/10.1145/3147.3165},
+    doi = {10.1145/3147.3165},
+    abstract = {We introduce fast algorithms for selecting a random sample of n records without replacement from a pool of N records, where the value of N is unknown beforehand. The main result of the paper is the design and analysis of Algorithm Z; it does the sampling in one pass using constant space and in O(n(1 + log(N/n))) expected time, which is optimum, up to a constant factor. Several optimizations are studied that collectively improve the speed of the naive version of the algorithm by an order of magnitude. We give an efficient Pascal-like implementation that incorporates these modifications and that is suitable for general use. Theoretical and empirical results indicate that Algorithm Z outperforms current methods by a significant margin.},
+    journal = {ACM Trans. Math. Softw.},
+    month = {mar},
+    pages = {37-57},
+    numpages = {21}
+}
+
+@article{GNM,
+  title={On random graphs. I.},
+  author={Paul L. Erdos and Alfr{\'e}d R{\'e}nyi},
+  journal={Publicationes Mathematicae Debrecen},
+  year={2022},
+  url={https://api.semanticscholar.org/CorpusID:253789267}
+}
+
+@article{BA,
+    author = {Albert-László Barabási  and Réka Albert },
+    title = {Emergence of Scaling in Random Networks},
+    journal = {Science},
+    volume = {286},
+    number = {5439},
+    pages = {509-512},
+    year = {1999},
+    doi = {10.1126/science.286.5439.509},
+    URL = {https://www.science.org/doi/abs/10.1126/science.286.5439.509},
+    eprint = {https://www.science.org/doi/pdf/10.1126/science.286.5439.509},
+}
+
+@book{BABook,
+  author         = {Albert-László Barabási},
+  editor         = {},
+  publisher      = {Network Science},
+  title          = {Network Science Book},
+  year           = {2014}
+}
+
+@article{Alias,
+    author = {Walker, Alastair J.},
+    title = {An Efficient Method for Generating Discrete Random Variables with General Distributions},
+    year = {1977},
+    issue_date = {Sept. 1977},
+    publisher = {Association for Computing Machinery},
+    address = {New York, NY, USA},
+    volume = {3},
+    number = {3},
+    issn = {0098-3500},
+    url = {https://doi.org/10.1145/355744.355749},
+    doi = {10.1145/355744.355749},
+    journal = {ACM Trans. Math. Softw.},
+    month = {sep},
+    pages = {253-256},
+    numpages = {4}
+}
