@@ -37,6 +37,8 @@
 
 % Packages
 \usepackage{mathtools}
+\usepackage{nicefrac}
+\newcommand{\Mod}[1]{\ \mathrm{mod}\ #1}
 
 \usepackage[vlined,ruled,linesnumbered]{algorithm2e}
 \DontPrintSemicolon
@@ -142,31 +144,53 @@ This can not only be used to uniformly sample an element from an array but also 
 
 
 \subsection{Preliminaries}
+We denote by $x \div y$ the integer division operation, namely $\lfloor\nicefrac{x}{y}\rfloor$, and the remainder operation by $x \Mod y \equiv x - (x \div y)y$. 
+Divisions by a power of two can be efficiently implemented by Bit-\textsc{RightShift} denoted by $\gg$: $x \div 2^W \equiv x \gg W$.
+Similarly, we can efficiently compute the remainder of a division py a power of two by a logical \textsc{And}-operation, denoted by $\&$: $x \Mod 2^W \equiv x \And (2^W - 1)$.
+Typically, PRNGs generate uniform random numbers in an interval $[0,2^W)$ where $W \in \{32,64\}$, namely a uniform random $W$-bit number.
+
+Since we can map every integer in an interval $[a,b)$ to the interval $[0,b - a)$ by subtracting $a$, our goal is to generate a uniform random integer in an interval $[0,s)$ for a given $s$.
+If we map all integers $x$ in $[0,2^W)$ with the function $x \Mod s$, we get the following sequence:
+{\Large
+\[
+    \overbrace{\underbrace{\overbrace{0,1,\ldots,s - 1}^{\text{$s$ values}},\overbrace{0,1,\ldots,s - 1}^{\text{$s$ values}},\ldots,\overbrace{0,1,\ldots,s - 1}^{\text{$s$ values}}}_{\text{$\left(2^W \div s\right) \cdot s$ values}},\underbrace{0,1,\ldots,\left(2^W \Mod s\right) - 1}_{\text{$2^W \Mod s$ values}}}^{\text{$2^W$ values}}
+\]
+}%
+This motivates the following lemma:
+\begin{lemma}[Remainder Multiples]
+    For given integers $a,b,s > 0$ with $a < b$, there exist exactly $(b - a) \div s$ integers $x \in [a,b)$ for every $0 \leq r < s$ such that $x \Mod s \equiv r$ whenever $s$ divides $b - a$.
+\end{lemma}
+
+
 
 \subsection{Related Work}
 
 \subsection{Structure}
+We present and analyse existing techniques for uniformly sampling random integers in an interval $[0,s)$ in \hyperref[sec:2]{Section 2}.
+In \hyperref[sec:3]{Section 3}, we present the main contribution of this paper: a nearly-divisionless algorithm to sampler uniform random integers in an interval $[0,s)$.
+In \hyperref[sec:4]{Section 4}, we benchmark this new technique in two experiments - shuffling and performance in the novel \textsc{Upmem-Pim} architecture - and \hyperref[sec:5]{Section 5} contains a summary of all results.
+
 
 %%%%% Techniques
-\section{Existing Techniques}
+\section{Existing Techniques}\label{sec:2}
 \subsection{Biased}
 
 \subsection{Unbiased}
 
 
 %%%%% Lemire
-\section{Nearly Divisionless Unbiased Sampling}
+\section{Nearly Divisionless Unbiased Sampling}\label{sec:3}
 
 
 %%%%% Experiments
-\section{Experiments}
+\section{Experiments}\label{sec:4}
 \subsection{Shuffling-Experiments}
 
 \subsection{In-Memory-Processing-Experiments}
 
 
 %%%%% Conclusion
-\section{Conclusion}
+\section{Conclusion}\label{sec:5}
 
 
 
