@@ -149,7 +149,7 @@ Divisions by a power of two can be efficiently implemented by Bit-\textsc{RightS
 Similarly, we can efficiently compute the remainder of a division py a power of two by a logical \textsc{And}-operation, denoted by $\&$: $x \Mod 2^W \equiv x \And (2^W - 1)$.
 Typically, PRNGs generate uniform random numbers in an interval $[0,2^W)$ where $W \in \{32,64\}$, namely a uniform random $W$-bit number.
 
-Since we can map every integer in an interval $[a,b)$ to the interval $[0,b - a)$ by subtracting $a$, our goal is to generate a uniform random integer in an interval $[0,s)$ for a given $s$.
+Since we can map every integer in an interval $[a,b)$ to the interval $[0,b - a)$ by subtracting $a$, we want to generate a uniform random integer in an interval $[0,s)$ for a given $s$.
 If we map all integers $x$ in $[0,2^W)$ with the function $x \Mod s$, we get the following sequence:
 {\Large
 \[
@@ -189,9 +189,9 @@ In \hyperref[sec:4]{Section 4}, we provide a short summary.
 
 \subsubsection{Java}
 
-\subsubsection{Flips}
+\subsubsection{Fast-Dice-Roller}
 
-\subsubsection{Bitmask with Rejection}
+\subsubsection{Bitmask}
 
 
 
