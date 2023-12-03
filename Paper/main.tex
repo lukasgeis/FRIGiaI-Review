@@ -89,7 +89,7 @@ This can not only be used to uniformly sample an element from an array but also 
 %%% BEGIN Fisher-Yates-Shuffle
 \begin{algorithm}[!htb] \label{alg:fy}
     \caption{Fisher-Yates-Shuffle: uniformly shuffle an array of size $n$}
-    \Require{source of uniformly-distrbuted random integers in $[0,i]$ for parameter $i$}
+    \Require{source of uniformly-distributed random integers in $[0,i]$ for parameter $i$}
     \Require{array $A$ of size $n$}
     \For{$i = n - 1,\ldots,1$}{
         $j \leftarrow$ random integer in $[0,i]$\;
@@ -102,7 +102,7 @@ This can not only be used to uniformly sample an element from an array but also 
 %%% BEGIN G(n,m) Sampling
 \begin{algorithm}[!htb] \label{alg:gnm}
     \caption{Sampling of (directed) $\mathcal{G}(n,m)$ graphs using Reservoir Sampling}
-    \Require{source of uniformly-distrbuted random integers in $[0,i]$ for parameter $i$}
+    \Require{source of uniformly-distributed random integers in $[0,i]$ for parameter $i$}
     \Require{number of nodes $n$ and number of edges $m \leq n^2$}
     $E \leftarrow$ array (of edges) of size $m$\;
     \For{$i = 0,\ldots,m - 1$}{
@@ -121,7 +121,7 @@ This can not only be used to uniformly sample an element from an array but also 
 %%% BEGIN BA-Sampling
 \begin{algorithm}[!htb] \label{alg:ba}
     \caption{Preferential-Attachment-Generator \cite{BASampling}: sample BA-graphs in linear time}
-    \Require{source of uniformly-distrbuted random integers in $[0,i]$ for parameter $i$}
+    \Require{source of uniformly-distributed random integers in $[0,i]$ for parameter $i$}
     \Require{inital edge-list $E_0$ with $n_0$ nodes and $m_0 \coloneqq |E_0|$ edges, number of additional nodes $N$, neighbor-parameter $\nu$}
     $M \leftarrow$ array of size $2\left(m_0 + \nu N\right)$\;
     \For{$i = 0,\ldots,m_0 - 1$}{
@@ -143,55 +143,222 @@ This can not only be used to uniformly sample an element from an array but also 
 %%% END BA-Sampling
 
 
-\subsection{Preliminaries}
+\subsection{Preliminaries}\label{sec:1.2}
 We denote by $x \div y$ the integer division operation, namely $\lfloor\nicefrac{x}{y}\rfloor$, and the remainder operation by $x \Mod y \equiv x - (x \div y)y$. 
 Divisions by a power of two can be efficiently implemented by Bit-\textsc{RightShift} denoted by $\gg$: $x \div 2^W \equiv x \gg W$.
-Similarly, we can efficiently compute the remainder of a division py a power of two by a logical \textsc{And}-operation, denoted by $\&$: $x \Mod 2^W \equiv x \And (2^W - 1)$.
+Similarly, we denote a Bit-\textsc{LeftShift} by $\ll$.
+Additionally, we can efficiently compute the remainder of a division py a power of two by a logical \textsc{And}-operation, denoted by $\&$: $x \Mod 2^W \equiv x \And (2^W - 1)$.
 Typically, PRNGs generate uniform random numbers in an interval $[0,2^W)$ where $W \in \{32,64\}$, namely a uniform random $W$-bit number.
 
-Since we can map every integer in an interval $[a,b)$ to the interval $[0,b - a)$ by subtracting $a$, we want to generate a uniform random integer in an interval $[0,s)$ for a given $s$.
-If we map all integers $x$ in $[0,2^W)$ with the function $x \Mod s$, we get the following sequence:
-{\Large
-\[
-    \overbrace{\underbrace{\overbrace{0,1,\ldots,s - 1}^{\text{$s$ values}},\overbrace{0,1,\ldots,s - 1}^{\text{$s$ values}},\ldots,\overbrace{0,1,\ldots,s - 1}^{\text{$s$ values}}}_{\text{$\left(2^W \div s\right) \cdot s$ values}},\underbrace{0,1,\ldots,\left(2^W \Mod s\right) - 1}_{\text{$2^W \Mod s$ values}}}^{\text{$2^W$ values}}
-\]
+Since we can map every integer in an interval $[a,b)$ to the interval $[0,b - a)$ by subtracting $a$, we want to generate a uniform random integer in an interval $[0,n)$ for a given $n$.
+If we map all integers $x$ in $[0,2^W)$ with the function $x \Mod n$, we get the following sequence:
+{\large
+\begin{align}\label{eq:1}
+    \overbrace{\underbrace{\overbrace{0,1,\ldots,n - 1}^{\text{$n$ values}},\overbrace{0,1,\ldots,n - 1}^{\text{$n$ values}},\ldots,\overbrace{0,1,\ldots,n - 1}^{\text{$n$ values}}}_{\text{$\left(2^W \div n\right) \cdot n$ values}},\underbrace{0,1,\ldots,\left(2^W \Mod n\right) - 1}_{\text{$2^W \Mod n$ values}}}^{\text{$2^W$ values}}
+\end{align}
 }%
 This motivates the following lemma:
-\begin{lemma}[Remainder Multiples]
-    For given integers $a,b,s > 0$ with $a < b$, there exist exactly $(b - a) \div s$ integers $x \in [a,b)$ for every $0 \leq r < s$ such that $x \Mod s \equiv r$ whenever $s$ divides $b - a$.
+\begin{lemma}[Remainder Multiples] \label{lemma:1}
+    For given integers $a,b,n > 0$ with $a < b$, there exist exactly $(b - a) \div n$ integers $x \in [a,b)$ for every $0 \leq r < n$ such that $x \Mod n \equiv r$ whenever $n$ divides $b - a$.
 \end{lemma}
 
-
-
-\subsection{Related Work}
-
+%%% Might include later on - currently, there is no point in giving a overview over two sections
+\iffalse
 \subsection{Structure}
-We present and analyse existing techniques for uniformly sampling random integers in an interval $[0,s)$ in \hyperref[sec:2]{Section 2}.
-In \hyperref[sec:3]{Section 3}, we present the main contribution of this paper: a nearly-divisionless algorithm to sampler uniform random integers in an interval $[0,s)$.
+We present and analyse existing techniques for uniformly sampling random integers in an interval $[0,n)$ in \hyperref[sec:2]{Section 2}.
+In \hyperref[sec:3]{Section 3}, we present the main contribution of this paper: a nearly-divisionless algorithm to sampler uniform random integers in an interval $[0,n)$.
 In \hyperref[sec:4]{Section 4}, we provide a short summary.
+\fi
 
 %%%%% Techniques
 \section{Existing Techniques}\label{sec:2}
-\subsection{Biased}
+In this section, we will review a number of different techniques used for sampling a uniform random integer in a given range $[0,n)$.
+Throughout this section, we use {\texttt rand()} to indicate the drawing of a uniform random $W$-bit number.
 
+\subsection{Biased}
+While our goal is to generate \emph{uniform} random numbers, there are also some techniques that generate biased - thus not uniform - random integers in a given range in exchange for much less complexity.
 
 \subsubsection{Modulo Reduction}
+The most common and under-egineered algorithm is the modulo reduction, namely
+\begin{center}
+    $\texttt{rand()} \Mod n$
+\end{center}
+Clearly, this method returns a random integer in the interval $[0,n)$.
+However, as seen in \hyperref[eq:1]{equation (1)}, for $n$ that do not perfectly divide $2^W$, we have a \emph{leftover} interval at the end that is biased.
+Thus, not all integers in $[0,n)$ are equally likely and this reduction does not produce uniform numbers.
 
-\subsubsection{Multiply-and-Shift}
+Furthermore, while this approach is probably the most intuitive and simplistic, it also illustrates why drawing numbers within a range is typically slow.
+We require a remainder operation which can be implemented through the division (\texttt{div}) instruction.
+For $32$-bit registers, this instruction has a latency of $26$ cycles and for $64$-bit registers, the latency lies within the range of $35$ to $88$ cycles~\cite{Instructions}.
+
 
 \subsubsection{Floating-Point Conversion}
+A common method to not rely on the costly \texttt{div} instruction is using a fixed-point floating-point conversion which consists of the following steps:
+\begin{enumerate}
+    \item Draw $x = \texttt{rand()}$ and convert $x$ to a floating-point number.
+    \item Multiply $x$ with $2^{-W}$ to generate a floating point number $y \in [0,1)$.
+    \item Multiply $y$ with $n$ and round it down to an integer before returning the result.
+\end{enumerate}
+Again, this method clearly generates a random integer in $[0,n)$ because $y$ is less than $1$ and we multiply with $n$ before rounding down.
+However, in the typical floating-point standard (IEEE 754) with $32$ bits, we have a mantisse of $24$ bits and hence can at best represent all values in $[0,2^{24})$ divided by $2^{24}$.
+Thus, we do not get the same accuracy as we would have with a $32$-bit number and hence can not generate all numbers in $[0,n)$ if $n > 2^{24}$.
+A solution would be to instead use double precision floating-point numbers that have a mantisse of $53$ bits and thus can represent all values in $[0,2^{53})$ divided by $2^{53}$.
+But this again is not enough if $W = 64$ where we require a mantisse of at least $64$ bits which is not accessible on all systems (long double).
+Furthermore, the conversion also comes at a price: the corresponding instructions have a latency of at least $6$ cycles on Skylake processors~\cite{Instructions}.
+
+
+\subsubsection{Multiply-and-Shift}
+We can adjust the prior floating-point conversion method to only use fixed-point arithmetic rather than floating-point arithmetic:
+\begin{center}
+    $\left(\texttt{rand()} \cdot n\right) \gg W$
+\end{center}
+where $\gg W$ is equivalent to dividing by $2^W$ as mentioned in \hyperref[sec:1.2]{section 1}.
+Clearly, this method and the floating-point method before work the same way, hence creating the same bias - but here, we multiply first before dividing by $2^W$~\cite{MultShift}.
+On the other hand, by multiplying first, we might get a number much bigger than $2^W$ and thus needing a new representation with more than $W$ bits.
+For $W = 32$, we simply switch to a $64$-bit number, but for $W = 64$, we have to switch to a $128$-bit number which is inherently slower than $32$-bit or $64$-bit numbers.
+Alternatively, for $W = 32$, a good compiler could compile this into a $32$-bit \texttt{mult} instruction which generates a $32$-bit number for the first $32$ bits and a $32$-bit number for the last $32$ bits.
 
 
 \subsection{Unbiased}
-
+While all prior approaches are very simplistic and always require only a handful of instructions, they also generate a bias which can vary depending on $n$.
+But since we want to generate a \emph{uniform} random number in $[0,n)$, we somehow need to get rid of such bias by incorporating a fail-safe: rejection sampling.
 
 \subsubsection{OpenBSD}
+We somehow want to get rid of the bias generated by the last interval in \hyperref[eq:1]{equation (1)}.
+The key idea is that this interval does not have to be on the right.
+Instead of rejecting all values generated by a random $x \geq 2^W - (2^W \Mod n)$, we could also reject all values generated by a random $x < 2^W \Mod n$ to achieve uniformity since the interval $[2^W \Mod n, 2^W)$ has size $2^W - (2^W \Mod n)$ which is divisible by $n$.
+Due to \hyperref[lemma:1]{Lemma 1}, for every $r \in [0,n)$, we have exactly $(b - a) \div n$ numbers in $[2^W \Mod n,2^W)$ with remainder $r$, thus having a uniform distribution over $[0,n)$ when computing the remainder.
+This yields \hyperref[alg:openbsd]{Algorithm 4} which stems from the C standard library in OpenBSD and macOS (\texttt{arc4random\_uniform}), and has been adopted by the Go language (\texttt{Int63n, Int31n}) with slight implementation differences~\cite{GoLang} as well as the GNU C++ standard library~\cite{GnuCpp}.
+
+%%% BEGIN OpenBSD
+\begin{algorithm}[!htb] \label{alg:openbsd}
+    \caption{The OpenBSD algorithm.}
+    \Require{source of uniformly-distributed random integers in $[0,2^W)$ given by \texttt{rand()}}
+    \Require{size of target interval given by $n$}
+    $t \leftarrow \left(2^W - n\right) \Mod n$\tcc*[r]{$ \left(2^W - n\right) \Mod n \equiv 2^W \Mod n$}
+    $x \leftarrow$ \texttt{rand()}\;
+    \While{$x < t$}{
+        $x \leftarrow$ \texttt{rand()}\;
+    }
+    \KwRet{$x \Mod n$}\;
+\end{algorithm}
+%%% END OpenBSD
+
+In comparison to the biased techniques, we now may have to sample more than one random integer in $[0,2^W)$ to generate an integer in $[0,n)$.
+Note that the number of random $W$-bit numbers drawn follows a geometric distribution with a success probability of $p = 1 - \frac{2^W \Mod n}{2^W}$.
+Thus on average, we need $\frac{1}{p}$ random $W$-bit numbers which is less than $2$ because $p > \frac{1}{2}$, irrespective of $n$.
+We also always require two remainder operations: one to compute the threshold that determines whether we reject a drawn random number and one to use the modulo reduction to generate the final number.
+
 
 \subsubsection{Java}
+Since we expect remainder operations to have high latency, always needing to compute two remainders can be quite costly.
+Hence, the Java language, in its \texttt{Random class}, uses a different approach.
+The key insight is that when we draw a random integer $x \in [0,2^W)$ and compute its remainder $r = x \Mod n$, we can map all integers in $[0,2^W)$ to a multiple of $n$ by computing $x - r$.
+Then, every number in the last interval in \hyperref[eq:1]{equation (1)} gets mapped to the last multiple $y$ of $n$ which is not greater than $2^W$.
+Note that this implies $y > 2^W - n$.
+Every other integer is mapped to a different (and thus smaller) multiple $z$ of $n$ for which $z \leq y - n$ and thus $z \leq 2^W - n$.
+Consequently, if we reject $x$ if $x - r > 2^W - n$ and otherwise return $r$, we get a unbiased generator.
+The details can be seen in \hyperref[alg:java]{Algorithm 5}.
+
+%%% BEGIN Java
+\begin{algorithm}[!htb] \label{alg:java}
+    \caption{The Java algorithm.}
+    \Require{source of uniformly-distributed random integers in $[0,2^W)$ given by \texttt{rand()}}
+    \Require{size of target interval given by $n$}
+    $x \leftarrow$ \texttt{rand()}\;
+    $r \leftarrow x \Mod n$\;
+    \While{$x - r > 2^W - n$}{
+        $x \leftarrow$ \texttt{rand()}\;
+        $r \leftarrow x \Mod n$\;
+    }
+    \KwRet{$r$}\;
+\end{algorithm}
+%%% END Java
+
+Again, the number of random draws of $W$-bit numbers follows a geometric distrbution with $p = 1 - \frac{2^W \Mod n}{2^W}$ and we expect to draw $\frac{1}{p} < 2$ random $W$-bit numbers before returning.
+However, this time, for every drawn random number, we also need to compute a remainder, hence we also expect $\frac{1}{p} < 2$ remainder operations.
+For small $n$, this is great because with high probability, we only need to compute one remainder operation in expectation as opposed to two.
 
 \subsubsection{Fast-Dice-Roller}
+For all prior unbiased algorithms, we need to use at least one remainder operation to debias the algorithm.
+Jérémie Lumbroso however devised an algorithm for sampling uniform random integers in $[0,n)$ for a given $n$ by iteratively building up the final number bit-by-bit~\cite{Flips}.
+In comparison to previous algorithms, we do not use the whole $W$ bits generated by the PRNG but instead only use one bit at a time building up the final number consisting of $\lceil\log_2n\rceil + 1$ bits.
+If we, at some point, overshoot and generate a number bigger than $n$ (but smaller than $2n$) we take a step back by subtracting $n$ and rebuilding the necessary bits.
+The algorithmic details can be seen in \hyperref[alg:flips]{Algorithm 6}.
+
+%%% BEGIN Flips
+\begin{algorithm}[!htb] \label{alg:flips}
+    \caption{The Fast-Dice-Roller algorithm.}
+    \Require{source of a uniformly-distributed random bit given by \texttt{flip()}}
+    \Require{size of target interval given by $n$}
+    $b \leftarrow 1$\;
+    $x \leftarrow 0$\;
+    \While{\emph{true}}{
+        $b \leftarrow 2 \cdot b$\;
+        $x \leftarrow 2 \cdot x + \texttt{flip()}$\;
+        \If{$b \geq n$}{
+            \uIf{$x < n$}{
+                \KwRet{$x$}\;
+            } \Else{
+                $b \leftarrow b - n$\;
+                $x \leftarrow x - n$\;
+            }
+        }
+    }
+\end{algorithm}
+%%% END Flips
+
+\begin{lemma}[Correctness of Fast-Dice-Roller~\cite{Flips}]
+    The Fast-Dice-Roller algorithms returns a uniformly distributed random integer in $[0,n)$ and terminates in expected time $\Theta(\log n)$.
+\end{lemma}
+\begin{proof}
+    Consider the following loop invariant: $x$ is uniformly distributed over $[0,b)$.
+    At the beginning, this is trivially true as $b$ is $1$ the only value $x$ can take (and takes) is $0$.
+    In line $4$ we double $b$, but also double $x$ in line $5$ before adding a parity bit which ensures uniformity in the enlarged new range.
+    Since we reach line $10$ and $11$ only when $x \geq n$, $x$ must be uniformly distributed in $[n,b)$ at this point.
+    Since we subtract $n$ from both $b$ and $x$, we simply shift the range from $[n,b)$ to $[0,b - n)$ maintaining uniformity.
+    As $x$ is always uniformly distributed in $[0,b)$ due to this loop invariant, when we return $x$, it must also be uniformly distributed over $[0,n)$.
+
+    For the proof of termination time, consider a less efficient variant of this algorithms that throws away all prior sampled bits when rejecting in line $9$-$11$.
+    Then, in each iteration, we have $\Theta(\log n)$ steps before the condition in line $6$ is \emph{true}.
+    Since we double $b$ in each iteration, we know that $b < 2n$ and hence, due to the previous loop invariant, we accept with probability $p = \nicefrac{n}{2^{\lfloor\log_2n\rfloor + 1}} > \nicefrac{1}{2}$, thus proving the lemma.
+\end{proof}
+Clearly, while this algorithm completely avoids any remainder or division operation, for most $n$, it is too slow.
+In comparison, every prior algorithm needs constant time or expected constant time to generate a uniform random number in $[0,n)$.
+Fast-Dice-Roller, on the other hand, needs expected logarithmic time for sampling which is catastrophical for bigger $n$ - a big price to pay for avoiding division (and multiplication if line $4$ and $5$ are implemented using a \textsc{BitShift}).
+
 
 \subsubsection{Bitmask}
+The main reason, Fast-Dice-Roller is highly impractical, is due to the fact that we build up our random number bit-by-bit instead of drawing all required bits at once.
+This motivates the following algorithm (see \hyperref[alg:bitmask]{Algorithm 7}) that was adopted by Apple in the macOS Sierra release when they made their own revision to the code of \texttt{arc4random\_uniform}~\cite{Apple}.
+
+%%% BEGIN Bitmask
+\begin{algorithm}[!htb] \label{alg:bitmask}
+    \caption{The Bitmask algorithm.}
+    \Require{source of uniformly-distributed random integers in $[0,2^W)$ given by \texttt{rand()}}
+    \Require{size of target interval given by $n$}
+    $z \leftarrow$ number of leading zeros in the binary representation of $n$\;
+    $m \leftarrow 1 \ll (W - z)$\tcc*[r]{$1 \ll (W - z) \equiv 2^{W - z}$}
+    $m \leftarrow m - 1$\;
+    $x \leftarrow \texttt{rand()} \And m$\;
+    \While{$x \geq n$}{
+        $x \leftarrow \texttt{rand()} \And m$\;
+    }
+    \KwRet{$x$}\;
+\end{algorithm}
+%%% END Bitmask
+
+The key idea is to first compute $k$ such that $k$ is the smallest value with $2^k \geq n$.
+We then can use a Bitmask $m = 2^k - 1$ to only take the necessary $k$ bits from our generated $W$-bit number and use rejection sampling to generate a uniform random number in $[0,n)$.
+This works in expected constant time since we accept with probability $p = \nicefrac{n}{2^k} > \nicefrac{1}{2}$.
+
+Bitmask completely avoids any type of division operation.
+Instead, we have to compute the number of leading zeros in line $1$.
+For C and C++, the GCC-Compiler provides the \texttt{\_\_builtin\_clz()} method to compute just that~\cite{GccCLZ}.
+In Rust, we can use the \texttt{leading\_zeros()} method of the standard library~\cite{RustCLZ}.
+These methods however can perform vastly different depending on the underlying architecture.
+For processors which have an inbuilt \texttt{clz} instruction such as ARM~\cite{ArmCLZ}, the compiler could translate this line into such an assembly instruction.
+In systems without direct support, one might to rely on more algorithmic implementations such as~\cite{ImplCLZ}.
 
 
 
