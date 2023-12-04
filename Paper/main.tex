@@ -61,7 +61,13 @@
 
 %%%%% Abstract
 \begin{abstract}
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent convallis orci arcu, eu mollis dolor. Aliquam eleifend suscipit lacinia. Maecenas quam mi, porta ut lacinia sed, convallis ac dui. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse potenti. 
+    In randomized algorithms and other probabilistic practices we often need to generate uniform random integers in a given interval.
+    This is essential for algorithms like the Fisher-Yates random shuffle or simply drawing an element from a list uniformly at random.
+    Pseudo-random numbers however are often generated with a fixed number of bits and thus need to be mapped to the desired interval without introducing bias.
+    Common methods often include division operations that are relatively expensive on most processors.
+    Therefore, Lemire introduced an algorithm that can sample uniform random integers in a given range $[0,n)$ with zero to one division operations at most~\cite{Lemire}.
+
+    In this seminar report on the paper by Lemire, we present a variety of algorithms that generate random integers in a given range and compare them on runtime, number of division operations, and statistical bias.
 \end{abstract}
 
 
