@@ -45,7 +45,13 @@
 \SetKwInOut{Require}{Require}
 
 \usepackage{hyperref}
-
+\usepackage{array}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}} % Centered Multilines
+\renewcommand{\arraystretch}{1.5}
+\usepackage{booktabs} % Rules
+\usepackage{pifont} % checkmark / cross - thanks to `https://tex.stackexchange.com/questions/42619/xmark-that-complements-the-ams-checkmark`
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
 
 
 \begin{document}
@@ -78,7 +84,7 @@ This can not only be used to uniformly sample an element from an array but also 
     There exist an uncountable number of such models and almost all of them require some sort of integer sampling in an interval. 
     For example, the $\mathcal{G}(n,m)$ model~\cite{GNM} uniformly samples a (directed) graph with $n$ nodes and $m$ edges. 
     A possible algorithm for this problem is Reservoir-Sampling~\cite{Reservoir}(see \hyperref[alg:gnm]{Algorithm 2}) which is a general technique that can sample $k$ elements without replacement from an input stream. 
-    Another model is the BA model~\cite{BABook,BA} which iteratively builds the graph by adding nodes with edges to previously added nodes (see \hyperref[alg:ba]{Algorithm 3}). 
+    Another model is the BA model~\cite{BABook,BA} which iteratively builds the graph by adding nodes with edges to previously added nodes. %(see \hyperref[alg:ba]{Algorithm 3}). 
     Both models require sampling of an integer in an interval for each of its edges (or more).
     \item An Alias-Table~\cite{Alias} can be used to simulate static discrete distributions in practice. 
     After creating and initializing the table, we can sample in (expected) time $\Theta(1)$ by drawing a uniform random row and offset in each round. 
@@ -118,6 +124,9 @@ This can not only be used to uniformly sample an element from an array but also 
 \end{algorithm}
 %%% END G(n,m) Sampling
 
+
+%%% This block will not be included in the final version but is currently here in case the feedback says, it is useful and not over the top
+\iffalse
 %%% BEGIN BA-Sampling
 \begin{algorithm}[!htb] \label{alg:ba}
     \caption{Preferential-Attachment-Generator \cite{BASampling}: sample BA-graphs in linear time}
@@ -141,7 +150,7 @@ This can not only be used to uniformly sample an element from an array but also 
     \KwRet{$E$}\;
 \end{algorithm}
 %%% END BA-Sampling
-
+\fi
 
 \subsection{Preliminaries}\label{sec:1.2}
 We denote by $x \div y$ the integer division operation, namely $\lfloor\nicefrac{x}{y}\rfloor$, and the remainder operation by $x \Mod y \equiv x - (x \div y)y$. 
@@ -162,13 +171,8 @@ This motivates the following lemma:
     For given integers $a,b,n > 0$ with $a < b$, there exist exactly $(b - a) \div n$ integers $x \in [a,b)$ for every $0 \leq r < n$ such that $x \Mod n \equiv r$ whenever $n$ divides $b - a$.
 \end{lemma}
 
-%%% Might include later on - currently, there is no point in giving a overview over two sections
-\iffalse
-\subsection{Structure}
-We present and analyse existing techniques for uniformly sampling random integers in an interval $[0,n)$ in \hyperref[sec:2]{Section 2}.
-In \hyperref[sec:3]{Section 3}, we present the main contribution of this paper: a nearly-divisionless algorithm to sampler uniform random integers in an interval $[0,n)$.
-In \hyperref[sec:4]{Section 4}, we provide a short summary.
-\fi
+
+
 
 %%%%% Techniques
 \section{Existing Techniques}\label{sec:2}
@@ -178,7 +182,7 @@ Throughout this section, we use {\texttt rand()} to indicate the drawing of a un
 \subsection{Biased}
 While our goal is to generate \emph{uniform} random numbers, there are also some techniques that generate biased - thus not uniform - random integers in a given range in exchange for much less complexity.
 
-\subsubsection{Modulo Reduction}
+\subsubsection{Modulo Reduction}\label{sec:2.1.1}
 The most common and under-egineered algorithm is the modulo reduction, namely
 \begin{center}
     $\texttt{rand()} \Mod n$
@@ -192,13 +196,14 @@ We require a remainder operation which can be implemented through the division (
 For $32$-bit registers, this instruction has a latency of $26$ cycles and for $64$-bit registers, the latency lies within the range of $35$ to $88$ cycles~\cite{Instructions}.
 
 
-\subsubsection{Floating-Point Conversion}
+\subsubsection{Floating-Point Conversion}\label{sec:2.1.2}
 A common method to not rely on the costly \texttt{div} instruction is using a fixed-point floating-point conversion which consists of the following steps:
 \begin{enumerate}
     \item Draw $x = \texttt{rand()}$ and convert $x$ to a floating-point number.
     \item Multiply $x$ with $2^{-W}$ to generate a floating point number $y \in [0,1)$.
     \item Multiply $y$ with $n$ and round it down to an integer before returning the result.
 \end{enumerate}
+
 Again, this method clearly generates a random integer in $[0,n)$ because $y$ is less than $1$ and we multiply with $n$ before rounding down.
 However, in the typical floating-point standard (IEEE 754) with $32$ bits, we have a mantisse of $24$ bits and hence can at best represent all values in $[0,2^{24})$ divided by $2^{24}$.
 Thus, we do not get the same accuracy as we would have with a $32$-bit number and hence can not generate all numbers in $[0,n)$ if $n > 2^{24}$.
@@ -207,14 +212,17 @@ But this again is not enough if $W = 64$ where we require a mantisse of at least
 Furthermore, the conversion also comes at a price: the corresponding instructions have a latency of at least $6$ cycles on Skylake processors~\cite{Instructions}.
 
 
-\subsubsection{Multiply-and-Shift}
+\subsubsection{Multiply-and-Shift}\label{sec:2.1.3}
 We can adjust the prior floating-point conversion method to only use fixed-point arithmetic rather than floating-point arithmetic:
 \begin{center}
     $\left(\texttt{rand()} \cdot n\right) \gg W$
 \end{center}
 where $\gg W$ is equivalent to dividing by $2^W$ as mentioned in \hyperref[sec:1.2]{section 1}.
 Clearly, this method and the floating-point method before work the same way, hence creating the same bias - but here, we multiply first before dividing by $2^W$~\cite{MultShift}.
-On the other hand, by multiplying first, we might get a number much bigger than $2^W$ and thus needing a new representation with more than $W$ bits.
+On the other hand, by multiplying with $n$ first, we get a number in $[0,n \cdot 2^W)$ instead.
+If we now divide by $2^W$, we map all multiples of $n$ in $[0,2^W)$ to $0$, all multiples of $n$ in $[2^W, 2 \cdot 2^W)$ to $1$, and so on such that we map all multiples of $n$ in $[i \cdot 2^W, (i + 1) \cdot 2^W)$ (the $(i + 1)$\textsuperscript{th} $2^W$-interval) to $i$.
+
+Since we might get a number much bigger than $2^W$ and thus need a new representation with more than $W$ bits.
 For $W = 32$, we simply switch to a $64$-bit number, but for $W = 64$, we have to switch to a $128$-bit number which is inherently slower than $32$-bit or $64$-bit numbers.
 Alternatively, for $W = 32$, a good compiler could compile this into a $32$-bit \texttt{mult} instruction which generates a $32$-bit number for the first $32$ bits and a $32$-bit number for the last $32$ bits.
 
@@ -223,7 +231,7 @@ Alternatively, for $W = 32$, a good compiler could compile this into a $32$-bit 
 While all prior approaches are very simplistic and always require only a handful of instructions, they also generate a bias which can vary depending on $n$.
 But since we want to generate a \emph{uniform} random number in $[0,n)$, we somehow need to get rid of such bias by incorporating a fail-safe: rejection sampling.
 
-\subsubsection{OpenBSD}
+\subsubsection{OpenBSD}\label{sec:2.2.1}
 We somehow want to get rid of the bias generated by the last interval in \hyperref[eq:1]{equation (1)}.
 The key idea is that this interval does not have to be on the right.
 Instead of rejecting all values generated by a random $x \geq 2^W - (2^W \Mod n)$, we could also reject all values generated by a random $x < 2^W \Mod n$ to achieve uniformity since the interval $[2^W \Mod n, 2^W)$ has size $2^W - (2^W \Mod n)$ which is divisible by $n$.
@@ -250,7 +258,7 @@ Thus on average, we need $\frac{1}{p}$ random $W$-bit numbers which is less than
 We also always require two remainder operations: one to compute the threshold that determines whether we reject a drawn random number and one to use the modulo reduction to generate the final number.
 
 
-\subsubsection{Java}
+\subsubsection{Java}\label{sec:2.2.2}
 Since we expect remainder operations to have high latency, always needing to compute two remainders can be quite costly.
 Hence, the Java language, in its \texttt{Random class}, uses a different approach.
 The key insight is that when we draw a random integer $x \in [0,2^W)$ and compute its remainder $r = x \Mod n$, we can map all integers in $[0,2^W)$ to a multiple of $n$ by computing $x - r$.
@@ -279,7 +287,7 @@ Again, the number of random draws of $W$-bit numbers follows a geometric distrbu
 However, this time, for every drawn random number, we also need to compute a remainder, hence we also expect $\frac{1}{p} < 2$ remainder operations.
 For small $n$, this is great because with high probability, we only need to compute one remainder operation in expectation as opposed to two.
 
-\subsubsection{Fast-Dice-Roller}
+\subsubsection{Fast-Dice-Roller}\label{sec:2.2.3}
 For all prior unbiased algorithms, we need to use at least one remainder operation to debias the algorithm.
 Jérémie Lumbroso however devised an algorithm for sampling uniform random integers in $[0,n)$ for a given $n$ by iteratively building up the final number bit-by-bit~\cite{Flips}.
 In comparison to previous algorithms, we do not use the whole $W$ bits generated by the PRNG but instead only use one bit at a time building up the final number consisting of $\lceil\log_2n\rceil + 1$ bits.
@@ -328,7 +336,7 @@ In comparison, every prior algorithm needs constant time or expected constant ti
 Fast-Dice-Roller, on the other hand, needs expected logarithmic time for sampling which is catastrophical for bigger $n$ - a big price to pay for avoiding division (and multiplication if line $4$ and $5$ are implemented using a \textsc{BitShift}).
 
 
-\subsubsection{Bitmask}
+\subsubsection{Bitmask}\label{sec:2.2.4}
 The main reason, Fast-Dice-Roller is highly impractical, is due to the fact that we build up our random number bit-by-bit instead of drawing all required bits at once.
 This motivates the following algorithm (see \hyperref[alg:bitmask]{Algorithm 7}) that was adopted by Apple in the macOS Sierra release when they made their own revision to the code of \texttt{arc4random\_uniform}~\cite{Apple}.
 
@@ -361,14 +369,86 @@ For processors which have an inbuilt \texttt{clz} instruction such as ARM~\cite{
 In systems without direct support, one might to rely on more algorithmic implementations such as~\cite{ImplCLZ}.
 
 
-
-
 %%%%% Lemire
 \section{Nearly Divisionless Unbiased Sampling}\label{sec:3}
+While completely avoiding division seems possible with the Fast-Dice-Roller and the Bitmask algorithm, it also comes at a cost: logarithmic time or a \texttt{clz} operation that might be even more expensive than a division on some systems.
+Hence, Lemire proposed an unbiased algorithm that uses the approach of the Multiply-and-Shift algorithm coupled with rejection sampling to remove bias.
+The algorithm (see \hyperref[alg:lemire]{Algorithm 8}) uses one divison operation at most and may also use no division operation at all.
+It is the main result of the underlying paper of this report~\cite{Lemire}. 
+
+%%% BEGIN Lemire
+\begin{algorithm}[!htb] \label{alg:lemire}
+    \caption{The Lemire algorithm.}
+    \Require{source of uniformly-distributed random integers in $[0,2^W)$ given by \texttt{rand()}}
+    \Require{size of target interval given by $n$}
+    $x \leftarrow \texttt{rand()}$\;
+    $m \leftarrow x \cdot n$\;
+    $l \leftarrow m \Mod 2^W$\;
+    \If{$l < n$}{
+        $t \leftarrow \left(2^W - n\right) \Mod n$\tcc*[r]{$\left(2^W - n\right) \Mod n \equiv 2^W \Mod n$}
+        \While{$l < t$}{
+            $x \leftarrow \texttt{rand()}$\;
+        $m \leftarrow x \cdot n$\;
+        $l \leftarrow m \Mod 2^W$\;
+        }
+    }
+    \KwRet{$m \div 2^W$}\;
+\end{algorithm}
+%%% END Lemire
+
+\noindent Note that the remainder operation in line $3$ and $9$ can be computed by a logical \textsc{And} operation and the division operation in line $10$ by a Right-\textsc{BitShift} as mentioned in \hyperref[sec:1.2]{Section 1}
+Thus, the only \emph{real} division operation is the remainder operation in line $5$.
+
+Since we use the same mapping as in Multiply-and-Shift, we remind the reader of the $(i + 1)$\textsuperscript{th} $2^W$-interval introduced earlier: $[i \cdot 2^W, (i + 1) \cdot 2^W)$.
+By \hyperref[lemma:1]{Lemma 1}, there exist exactly $\lfloor\nicefrac{2^W}{n}\rfloor$ multiples of $n$ in the restricted $(i + 1)$\textsuperscript{th} $2^W$-interval $[i \cdot 2^W + (2^W \Mod n), (i + 1) \cdot 2^W)$ as $n$ perfectly divides $(i + 1) \cdot 2^W - (i \cdot 2^W + (2^W \Mod n)) = 2^W - (2^W \Mod n)$.
+Thus, we can remove bias if we reject all multiples of $n$ in the interval $[i \cdot 2^W, i \cdot 2^W + (2^W \Mod n))$ for every $i$.
+
+The above algorithm does just that in lines $5$ and $6$.
+But it also makes use of the following observation: since $t = 2^W \Mod n$, we have $t < n$ and thus if we have $l \geq n$, we also know that $l \geq t$.
+In this case we know that we do not have to reject the current value without computing $t$ in the first place.
+Thus, we can completely skip the division operation with probability $p = \frac{2^W - n}{2^W} = 1 - \frac{n}{2^W}$.
+
 
 
 %%%%% Conclusion
 \section{Conclusion}\label{sec:4}
+We have seen several different algorithms that can be used to sample a random integer in an interval $[0,n)$.
+The results are summarized in \hyperref[tab:1]{Table 1}.
+As we introduce rejection sampling for unbiased algorithms, runtimes for those are taken as expected constant or logarithmic time, while runtimes for biased algorithms are constant overall.
+
+%%% BEGIN Results
+\begin{table}[!htb]
+    \centering
+    \begin{tabular}{c|P{25mm}P{25mm}P{15mm}P{15mm}}
+        \toprule
+        & expected number of integer division operations & maximal number of integer division operations & Unbiased? & (Expected) Runtime \\
+        \midrule
+        \hyperref[sec:2.1.1]{Modulo Reduction} & $1$ & $1$ & \xmark & $\Theta(1)$ \\
+        \hyperref[sec:2.1.2]{Floating-Point Conversion} & $0$ & $0$ & \xmark & $\Theta(1)$ \\
+        \hyperref[sec:2.1.3]{Multiply-and-Shift} & $0$ & $0$ & \xmark & $\Theta(1)$ \\
+        \hyperref[sec:2.2.1]{OpenBSD} & $2$ & $2$ & \cmark & $\Theta(1)$ \\
+        \hyperref[sec:2.2.2]{Java} & $\frac{2^W}{2^W - (2^W \Mod n)}$ & $\infty$ & \cmark & $\Theta(1)$ \\
+        \hyperref[sec:2.2.3]{Fast-Dice-Roller} & $0$ & $0$ & \cmark & $\Theta(\log n)$ \\
+        \hyperref[sec:2.2.4]{Bitmask} & $0$ & $0$ & \cmark & $\Theta(1)$ \\
+        \hyperref[sec:3]{Lemire} & $\frac{n}{2^W}$ & $1$ & \cmark & $\Theta(1)$ \\
+        \bottomrule
+    \end{tabular}
+    \caption{
+        Overview over different sampling algorithms: expected/maximal number of division operations, unbiased or biased, (expected) runtime
+    }
+    \label{tab:1}
+\end{table}
+%%% END Results
+
+While the bias is usually very small and negligible in most use-cases, if we sample millions of times, it can easily become apparent and strongly distort the final dataset depending on the algorithm.
+Hence, it is important to generate unbiased random integers at the cost of a little execution time.
+Common software libraries seem to rely on algorithms that always require at least one division, if not two or more which is very inefficient on most processors.
+While Bitmask has in theory zero division operations, the required \texttt{clz} operation can be as inefficient as the \texttt{div} instruction.
+Hence, the algorithm introduced by Lemire is a perfect fit for modern x64 processors as for small $n$, we require no division (or equally bad) operation at all and also bound the maximum number of divisions to at most one.
+
+For different technologies however, support for the computation of the full multiplication might be lacking such as in Graphics Processing Units (GPUs)~\cite{GPU} or DRAM Processing Units (DPUs) used for In-Memory-Processing in the \textsc{Upmem} architecture~\cite{Upmem}.
+In the \textsc{Upmem-Pim} toolchain, for example, an \texttt{clz} operation seems to greatly outshine a \texttt{div} operation~\cite{UpmemRng}.
+
 
 
 
