@@ -130,33 +130,6 @@ This can not only be used to uniformly sample an element from an array but also 
 %%% END G(n,m) Sampling
 
 
-%%% This block will not be included in the final version but is currently here in case the feedback says, it is useful and not over the top
-\iffalse
-%%% BEGIN BA-Sampling
-\begin{algorithm}[!htb] \label{alg:ba}
-    \caption{Preferential-Attachment-Generator \cite{BASampling}: sample BA-graphs in linear time}
-    \Require{source of uniformly-distributed random integers in $[0,i]$ for parameter $i$}
-    \Require{inital edge-list $E_0$ with $n_0$ nodes and $m_0 \coloneqq |E_0|$ edges, number of additional nodes $N$, neighbor-parameter $\nu$}
-    $M \leftarrow$ array of size $2\left(m_0 + \nu N\right)$\;
-    \For{$i = 0,\ldots,m_0 - 1$}{
-        $\left(M[2i], M[2i + 1]\right) \leftarrow E_0[i]$\;
-    }
-    \For{$i = 0,\ldots,N - 1$}{
-        \For{$j = 1,\ldots,\nu$}{
-            $k \leftarrow$ random integer in $[0,2(m_0 + i\nu) - 1]$\;
-            $M[2(m_0 + i\nu)] \leftarrow M[k]$\;
-            $M[2(m_0 + i\nu) + 1] \leftarrow n_0 + i$\;
-        }
-    }
-    $E \leftarrow$ array (of edges) of size $\left(m_0 + \nu N\right)$\;
-    \For{$i = 0,\ldots,m_0 + \nu N - 1$}{
-        $E[i] \leftarrow (M[2i], M[2i + 1])$\;
-    }
-    \KwRet{$E$}\;
-\end{algorithm}
-%%% END BA-Sampling
-\fi
-
 \subsection{Preliminaries}\label{sec:1.2}
 We denote by $x \div y \coloneqq \lfloor\nicefrac{x}{y}\rfloor$ the integer division operation, and the remainder operation by $x \Mod y \coloneqq x - (x \div y)y$. 
 Using a Bit-\textsc{RightShift}, denoted by $\gg$, we can efficiently implement divisions by a power of two: $x \div 2^W \coloneqq x \gg W$.
