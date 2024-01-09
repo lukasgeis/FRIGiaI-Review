@@ -173,7 +173,8 @@ Thus, not all integers in $[0,n)$ are equally likely and this reduction does not
 
 Furthermore, while this approach is probably the most intuitive and simplistic, it also illustrates why drawing numbers within a range is typically slow.
 We require a remainder operation which can be implemented through the division (\texttt{div}) instruction on x64 processors.
-For $32$-bit registers, this instruction has a latency of $26$ cycles and for $64$-bit registers, the latency lies within the range of $35$ to $88$ cycles~\cite{Instructions}.
+On Intel Skylake processors, this instruction has a latency of $26$ cycles for $32$-bit registers and for $64$-bit registers, the latency lies within the range of $35$ to $88$ cycles.
+Usually, a \texttt{div} instruction is one to two orders of magnitude slower than an \texttt{add} instruction~\cite{Instructions}.
 
 
 \subsubsection{Floating-Point Conversion}\label{sec:2.1.2}
@@ -353,7 +354,7 @@ In systems without direct support, one might to rely on more algorithmic impleme
 
 For small $n$, it might be inefficient to only use $\lceil\log_2(n)\rceil$ bits from each generated random $W$-bit number.
 Hence, using a buffer to store all random bits can speed up this algorithm as done in \texttt{arc4random\_uniform}~\cite{Apple}.
-Wu et al. provided a buffered version of this algorithm in~\cite{BitParallelFDR} which can also be interpreted as a bit-parallel Fast-Dice-Roller.
+Wu et al. provided a buffered version of this algorithm in which can also be interpreted as a bit-parallel Fast-Dice-Roller~\cite{BitParallelFDR}.
 
 
 %%%%% Lemire
