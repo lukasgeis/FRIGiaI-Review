@@ -16,7 +16,7 @@
 
 \category{} 
 \relatedversion{} 
-\supplement{Sources of implementations and experiments can be accessed at \url{https://github.com/lukasgeis/FRIGiaI-Review}}
+\supplement{Sources can be accessed at \url{https://github.com/lukasgeis/FRIGiaI-Review}}
 \acknowledgements{}
 \nolinenumbers 
 
@@ -61,7 +61,7 @@
 
 %%%%% Abstract
 \begin{abstract}
-    In randomized algorithms and other probabilistic methods we often need to generate uniform random integers in a given interval.
+    In randomized algorithms and other probabilistic methods, we often need to generate uniform random integers in a given interval.
     This is essential for algorithms like the Fisher-Yates random shuffle or simply drawing an element from an array uniformly at random.
     Pseudo-random numbers however are often generated as words with a fixed number of bits and thus need to be mapped to the desired interval without introducing bias.
     Common methods often include division operations that are relatively expensive on most processors.
@@ -81,9 +81,9 @@ The core of such algorithms is often the pseudo-random number generator (PRNG).
 There are many efficient PRNGs such as XorShift~\cite{XS}, MersenneTwister~\cite{MT}, linear congruential generators~\cite{LinConGen, MINSTD, LM}, and younger generators such as the PCG-family~\cite{PCG} and ChaCha~\cite{Cha}.
 These generators produce $32$-bit or $64$-bit words which we can interpret as unsigned integers in $[0,2^{32})$ and $[0,2^{64})$ respectively.
 However, for most applications we do not want to have such a large range of possible random values but instead want to confine the range to a given interval $[a,b]$.
-This can not only be used to uniformly sample an element from an array but also for more complex algorithms
+This can not only be used to uniformly sample an element from an array but also for more complex algorithms:
 \begin{itemize}
-    \item The Fisher-Yates random shuffle~\cite{FY} (see \hyperref[alg:fy]{Algorithm 1}) uniformly permutes an array of $n$ elements in time $\Theta(n)$ if we can sample in constant time. 
+    \item The Fisher-Yates random shuffle (see \hyperref[alg:fy]{Algorithm 1})~\cite{FY} uniformly permutes an array of $n$ elements in time $\Theta(n)$ if we can sample in constant time. 
     We have to draw a random integer in an interval for every shuffled element.
     \item A random graph model describes a distribution over a (parametrized) family of graphs. 
     There exist an uncountable number of such models and almost all of them require some sort of integer sampling in an interval. 
@@ -133,7 +133,7 @@ This can not only be used to uniformly sample an element from an array but also 
 \subsection{Preliminaries}\label{sec:1.2}
 We denote by $x \div y \coloneqq \lfloor\nicefrac{x}{y}\rfloor$ the integer division operation, and the remainder operation by $x \Mod y \coloneqq x - (x \div y)y$. 
 Using a Bit-\textsc{RightShift}, denoted by $\gg$, we can efficiently implement divisions by a power of two: $x \div 2^W \coloneqq x \gg W$.
-Similarly, we denote a Bit-\textsc{LeftShift} by $\ll$.
+Similarly, we denote a Bit-\textsc{LeftShift} by $\ll$ which can be used for efficient multiplication by a power of two.
 Additionally, with a bitwise \textsc{And}-operation, denoted by $\&$, we can efficiently compute the remainder of a division by a power of two: $x \Mod 2^W \coloneqq x \And (2^W - 1)$.
 In practice, PRNGs generate uniform random numbers in an interval $[0,2^W)$ where $W \in \{32,64\}$, namely a uniform random $W$-bit number.
 
@@ -168,7 +168,7 @@ The most common and under-egineered algorithm is the modulo reduction, namely
     $\texttt{rand()} \Mod n$
 \end{center}
 Clearly, this method returns a random integer in the interval $[0,n)$.
-However, as seen in \hyperref[eq:1]{equation (1)}, if $n$ does not perfectly divide $2^W$, we have a \emph{leftover} interval at the end that introduces bias as not all integers in $[0,n)$ are a part of this interval.
+However, as seen in \hyperref[eq:1]{equation (1)}, if $n$ does not divide $2^W$, we have a \emph{leftover} interval at the end that introduces bias as not all integers in $[0,n)$ are a part of this interval.
 Thus, not all integers in $[0,n)$ are equally likely and this reduction does not produce uniform numbers.
 
 Furthermore, while this approach is probably the most intuitive and simplistic, it also illustrates why drawing numbers within a range is typically slow.
@@ -185,7 +185,7 @@ A common method to not rely on the costly \texttt{div} instruction is using a fi
     \item Multiply $y$ with $n$ and round it down to an integer before returning the result.
 \end{enumerate}
 
-Again, this method clearly generates a random integer in $[0,n)$ because $y$ is less than $1$ and we multiply with $n$ before rounding down.
+Again, this method clearly generates a random integer in $[0,n)$ because $y$ is at most $1.0$ and we multiply with $n$ before rounding down (floating-point-errors are negligible because they get corrected in (3) by rounding down).
 However, in the commonly implemented floating-point standard (IEEE 754) with $32$ bits, we have a mantisse of $24$ bits and hence can at best represent all values in $[0,2^{24})$ divided by $2^{24}$.
 Thus, we can not represent all numbers in $[0,2^{32})$ divided by $2^{32}$ and have less precision than a $32$-bit number.
 Hence can not generate all numbers in $[0,n)$ if $n > 2^{24}$.
@@ -218,7 +218,7 @@ But since we want to generate a \emph{uniform} random number in $[0,n)$, we some
 We somehow want to get rid of the bias generated by the last interval in \hyperref[eq:1]{equation (1)}.
 The key idea is that this interval does not have to be on the right.
 Instead of rejecting all values generated by a random $x \geq 2^W - (2^W \Mod n)$, we could also reject all values generated by a random $x < 2^W \Mod n$ for uniformity since the interval $[2^W \Mod n, 2^W)$ is continuous and has size $2^W - (2^W \Mod n)$ which is divisible by $n$.
-Due to \hyperref[lemma:1]{Lemma 1}, for every $r \in [0,n)$, we have exactly $(b - a) \div n$ numbers in $[2^W \Mod n,2^W)$ with remainder $r$, thus having a uniform distribution over $[0,n)$ when computing the remainder.
+Due to \hyperref[lemma:1]{Lemma 1}, for every $r \in [0,n)$, we have exactly $(2^W - 2^W \Mod n) \div n$ numbers in $[2^W \Mod n,2^W)$ with remainder $r$, thus having a uniform distribution over $[0,n)$ when computing the remainder.
 This yields \hyperref[alg:openbsd]{Algorithm 3} which stems from the C standard library in OpenBSD and macOS (\texttt{arc4random\_uniform}), and has been adopted by the Go language (\texttt{Int63n, Int31n}) with slight implementation differences~\cite{GoLang} as well as the GNU C++ standard library~\cite{GnuCpp}.
 
 %%% BEGIN OpenBSD
@@ -385,7 +385,8 @@ It is the main result of the underlying paper of this report~\cite{Lemire}.
 \end{algorithm}
 %%% END Lemire
 
-\noindent Note that the remainder operation in line $3$ and $9$ can be computed by a bitwise \textsc{And} operation and the division operation in line $10$ by a Right-\textsc{BitShift} as mentioned in \hyperref[sec:1.2]{Section 1}
+\newpage % In the final version, this paragraph started on the previous page before the algorithm which could be confusing
+\noindent Note that the remainder operation in line $3$ and $9$ can be computed by a bitwise \textsc{And} operation and the division operation in line $10$ by a Right-\textsc{BitShift} as mentioned in \hyperref[sec:1.2]{Section 1}.
 Thus, the only \emph{real} division operation is the remainder operation in line $5$.
 
 Since we use the same mapping as in Multiply-and-Shift, we remind the reader of the $(i + 1)$\textsuperscript{th} $2^W$-interval introduced earlier: $[i \cdot 2^W, (i + 1) \cdot 2^W)$.
