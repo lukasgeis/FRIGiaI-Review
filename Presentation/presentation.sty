@@ -89,7 +89,7 @@
 	\leavevmode%
 	\hbox{%
 		\begin{beamercolorbox}[wd=.2\paperwidth,ht=2.25ex,dp=1ex,leftskip=2ex]{author in head/foot}%
-			\usebeamerfont{author in head/foot}\insertshortauthor\expandafter\ifblank\expandafter{\beamer@shortinstitute}{}{~~(\insertshortinstitute)}
+			\usebeamerfont{author in head/foot}\insertshortauthor
 		\end{beamercolorbox}%
 		\begin{beamercolorbox}[wd=.6\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
 			\usebeamerfont{title in head/foot}\insertshorttitle
@@ -191,7 +191,7 @@
 
 \defbeamertemplate*{section page}{customized}[1][]{
 	\begin{tikzpicture}[overlay, remember picture]
-		\node[opacity=\goetheheadopacity] at (current page.center) {\scalebox{5}{\usebeamerfont{section name}\usebeamercolor[fg]{section name}\liningnums{\insertsectionnumber}}};
+		\node[opacity=\goetheheadopacity] at (current page.center) {\scalebox{5}{\usebeamerfont{section name}\usebeamercolor[fg]{section name}\insertsectionnumber}};
 		\node[align=center] at (current page.center) {\usebeamerfont{section title}\usebeamercolor[fg]{section title} \insertsection};
 	\end{tikzpicture}
 }

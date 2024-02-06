@@ -2,6 +2,13 @@
 
 \RequirePackage{marvosym}
 
+\usepackage{mathtools}
+\usepackage{nicefrac}
+\newcommand{\Mod}[1]{\ \mathrm{mod}\ #1}
+
+\newcommand{\GB}[1]{\textcolor{goetheblau}{#1}}
+\newcommand{\ER}[1]{\textcolor{emorot}{#1}}
+
 \graphicspath{{img/}}
 
 \tikzset{
@@ -22,7 +29,17 @@
 		\titlepage
 	\end{frame}
 
+	\include{motivation}
+
 	\begin{frame}{Table of Contents}
 		\tableofcontents%[pausesections]
 	\end{frame}
+
+	\include{preliminaries}
+
+	\include{unbiased}
+
+	\include{lemire}
+
+	\include{conclusion}
 \end{document}
