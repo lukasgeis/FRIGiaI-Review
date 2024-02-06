@@ -40,6 +40,12 @@
         \end{itemize}
     \end{definition}
 
+    \vspace*{0.5cm}
+
+    \begin{definition}[Power Remainder]<+->
+        For $W,n \in \mathbb{N}$, we write $\RNW$ for $2^W \Mod n$.
+    \end{definition}
+
 \end{frame}
 
 
@@ -54,11 +60,9 @@
         \end{itemize}
     \end{block}
 
-    \begin{exampleblock}{}<+->
-        \begin{center}
+    \onslide<+->{\begin{center}
             $\texttt{rand()} \Mod n$
-        \end{center}
-    \end{exampleblock}
+    \end{center}}
 
     \onslide<+->{Does this work?}
     \begin{itemize}[<+->]
@@ -73,29 +77,13 @@
     \onslide<+->{Is the generated number uniform in $[0,n)$?}
 \end{frame}
 
-\iffalse
-\begin{frame}{The Naive Approach}
-    \begin{alertblock}{Is the generated number uniform in $\boldsymbol{[0,n)}$?}<+->
-        \onslide<+->{Consider the case where $W = 4$ and $n = 3$.}
-        \onslide<+->{Then, $[0,2^W)$ is}
-        \onslide<+->{\begin{align*}
-            0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
-        \end{align*}}
-        \onslide<+->{Apply $\left(x \Mod 3\right)$ for every $x$ and get}
-        \onslide<+->{\begin{align*}
-            0,1,2,0,1,2,0,1,2,0,1,2,0,1,2,0
-        \end{align*}}
-        \onslide<+->{\GB{$0$} appears \ER{$6$} times, \GB{$1$} appears \ER{$5$} times, and \GB{$2$} appears \ER{$5$} times!}
-    \end{alertblock}
 
-\end{frame}
-\fi
 
 \begin{frame}{The Naive Approach}
     \pause 
-    \onslide<+->{In general, applying $\left(x \Mod n\right)$ to $[0,2^W)$ yields}
-    \onslide<+->{\begin{align*}
-        \overbrace{\underbrace{\overbrace{0,1,\ldots,n - 1}^{\text{$n$ values}},\overbrace{0,1,\ldots,n - 1}^{\text{$n$ values}},\ldots,\overbrace{0,1,\ldots,n - 1}^{\text{$n$ values}}}_{\text{$\left(2^W \div n\right) \cdot n$ values}},\ER{\underbrace{0,1,\ldots,\left(2^W \Mod n\right) - 1}_{\text{$2^W \Mod n$ values}}}}^{\text{$2^W$ values}}
+    \onslide<+->{In general, applying $x \Mod n$ to $[0,2^W)$ yields}
+    \onslide<+->{\begin{align*}\everymath{} % Allows specific coloring
+        \overbrace{\underbrace{\overbrace{0,1,\ldots,n - 1}^{\text{$n$ values}},\overbrace{0,1,\ldots,n - 1}^{\text{$n$ values}},\ldots,\overbrace{0,1,\ldots,n - 1}^{\text{$n$ values}}}_{\text{$\left(2^W \div n\right) \cdot n$ values}},\ER{\underbrace{0,1,\ldots,\RNW - 1}_{\text{$\RNW$ values}}}}^{\text{$2^W$ values}}
     \end{align*}}
 
     \onslide<+->{We have a \ER{leftover} interval that introduces bias.}
@@ -103,6 +91,10 @@
     \vspace*{0.5cm}
 
     \onslide<+->{\GB{Every} approach that maps every integer in $[0,2^W)$ to a single number in $[0,n)$}
-    \onslide<+->{does \ER{not} generate uniform random integers in one step.}
+    \onslide<+->{does \ER{not} generate uniform random integers in one step}
+    \onslide<+->{whenever $n$ does not divide $2^W$.}
 
+    \vspace*{0.5cm}
+
+    \onslide<+->{\GB{Idea:} Use \ER{rejection sampling} to achieve uniformity!}
 \end{frame}

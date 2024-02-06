@@ -3,7 +3,20 @@
 \subsection{The OpenBSD Algorithm}
 \begin{frame}{The OpenBSD Algorithm}
     \pause 
-    
+    \begin{itemize}[<+->]
+        \item We shift the \ER{rejection interval} to the left:
+        \onslide<+->{\begin{align*}\everymath{} % Allows specific coloring
+            \overbrace{\ER{\underbrace{0,1,\ldots,\RNW - 1}_{\text{$\RNW$ values}}},\underbrace{\overbrace{\RNW,\ldots,n - 1,0,\ldots,\RNW - 1}^{\text{$n$ values}},\ldots,\overbrace{\RNW,\ldots,n - 1,0,\ldots,\RNW - 1}^{\text{$n$ values}}}_{\text{$\left(2^W \div n\right) \cdot n$ values}}}^{\text{$2^W$ values}}
+        \end{align*}}
+        \item Generate a uniform random number $x \in [0,2^W)$ until $x \geq \RNW$
+        \item Return $x \Mod n$
+    \end{itemize}
+
+    \begin{block}{Efficiency}<+->
+        \onslide<+->{We require $2$ integer division operations:}
+        \onslide<+->{one for computing $\RNW$ and}
+        \onslide<+->{one for computing $x \Mod n$.}
+    \end{block}
 
 \end{frame}
 
