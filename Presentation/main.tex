@@ -8,6 +8,8 @@
 
 \newcommand{\GB}[1]{\textcolor{goetheblau}{#1}}
 \newcommand{\ER}[1]{\textcolor{emorot}{#1}}
+\newcommand{\DG}[1]{\textcolor{dunkelgruen}{#1}}
+\newcommand{\BB}[1]{\textcolor{black}{#1}}
 
 \newcommand{\RNW}{\ensuremath{\mathcal{R}_n^W}}
 
@@ -20,6 +22,13 @@
 	legend/.style = {font=\boldmath, align=left},
 	every path/.style = {line width=.57mm, line cap=round},
 }
+
+\tikzstyle{overbrace text style}=[font=\small, above, pos=.5, yshift=3mm]
+\tikzstyle{overbrace style}=[decorate,decoration={brace,raise=2mm,amplitude=3pt}]
+\tikzstyle{underbrace style}=[decorate,decoration={brace,raise=2mm,amplitude=3pt,mirror},color=gray]
+\tikzstyle{underbrace text style}=[font=\small, below, pos=.5, yshift=-3mm]
+
+\usepackage{cancel}
 
 \subject{Seminar Algorithms for Big Data}
 \title{Fast Random Integer Generation in an Interval}

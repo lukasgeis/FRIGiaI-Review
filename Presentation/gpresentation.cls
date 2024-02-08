@@ -28,7 +28,7 @@
 
 \RequirePackage{tikz}
 \RequirePackage{tikzpagenodes}
-\usetikzlibrary{positioning, calc}
+\usetikzlibrary{positioning, calc,matrix,arrows.meta,decorations.pathreplacing}
 \RequirePackage{pgfplots}
 \pgfplotsset{compat=1.18}
 

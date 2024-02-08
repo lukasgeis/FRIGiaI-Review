@@ -14,27 +14,76 @@
 
     \begin{block}{Efficiency}<+->
         \onslide<+->{We require $2$ integer division operations:}
-        \onslide<+->{one for computing $\RNW$ and}
-        \onslide<+->{one for computing $x \Mod n$.}
+        \onslide<+->{one for computing $\RNW$}
+        \onslide<+->{and one for computing $x \Mod n$.}
     \end{block}
 
 \end{frame}
+
+%%% Array Drawing with Tikz instead of Equation
+\iffalse
+\onslide<+->{\begin{center}
+    \begin{tikzpicture}[scale = 0.7]
+        \draw[draw = goetheblau] (0.0,0.0) rectangle ++(5.0,1.0);
+        \draw[draw = goetheblau,overbrace style] (0.0,1.0) -- (5.0,1.0) node [overbrace text style] {\GB{$n$ values}};
+        \draw[draw = goetheblau] (5.0,0.0) rectangle ++(5.0,1.0);
+        \draw[draw = goetheblau,overbrace style] (5.0,1.0) -- (10.0,1.0) node [overbrace text style] {\GB{$n$ values}};
+        \node at (10.5,0.5) {$\cdots$};
+        \draw[draw = goetheblau] (11.0,0.0) rectangle ++(5.0,1.0);
+        \draw[draw = goetheblau,overbrace style] (11.0,1.0) -- (16.0,1.0) node [overbrace text style] {\GB{$n$ values}};
+        \draw[draw = emorot] (16.0,0.0) rectangle ++(3.0,1.0);
+        \draw[draw = emorot,overbrace style] (16.0,1.0) -- (19.0,1.0) node [overbrace text style] {$\text{\ER{\RNW values}}$};
+    \end{tikzpicture}
+\end{center}}
+\fi 
 
 
 
 \subsection{The Java Algorithm}
 \begin{frame}{The Java Algorithm}
     \pause 
-    
-
+    \begin{itemize}
+        \item<1-> Consider $x - \left(x \Mod n\right)$ for $x \in [0,2^W)$: \only<3>{\begin{align*}\everymath{} % Allows specific coloring
+            \overbrace{\overbrace{0,1,\ldots,n - 1}^{\text{$n$ values}},\overbrace{0,1,\ldots,n - 1}^{\text{$n$ values}},\ldots,\overbrace{0,1,\ldots,n - 1}^{\text{$n$ values}}}^{\text{$\left(2^W \div n\right) \cdot n$ values}},\ER{\overbrace{0,1,\ldots,\RNW - 1}^{\text{$\RNW$ values}}}
+        \end{align*}} \only<4>{\begin{align*}\everymath{} % Allows specific coloring
+            \overbrace{\underbrace{\overbrace{\BB{0},1,\ldots,n - 1}^{\text{$n$ values}}}_{\text{mapped to $0$}},\overbrace{0,1,\ldots,n - 1}^{\text{$n$ values}},\ldots,\overbrace{0,1,\ldots,n - 1}^{\text{$n$ values}}}^{\text{$\left(2^W \div n\right) \cdot n$ values}},\ER{\overbrace{0,1,\ldots,\RNW - 1}^{\text{$\RNW$ values}}}
+        \end{align*}} \only<5>{\begin{align*}\everymath{} % Allows specific coloring
+            \overbrace{\underbrace{\overbrace{\BB{0},1,\ldots,n - 1}^{\text{$n$ values}}}_{\text{mapped to $0$}},\underbrace{\overbrace{\BB{0},1,\ldots,n - 1}^{\text{$n$ values}}}_{\text{mapped to $n$}},\ldots,\overbrace{0,1,\ldots,n - 1}^{\text{$n$ values}}}^{\text{$\left(2^W \div n\right) \cdot n$ values}},\ER{\overbrace{0,1,\ldots,\RNW - 1}^{\text{$\RNW$ values}}}
+        \end{align*}} \only<6>{\begin{align*}\everymath{} % Allows specific coloring
+            \overbrace{\underbrace{\overbrace{\BB{0},1,\ldots,n - 1}^{\text{$n$ values}}}_{\text{mapped to $0$}},\underbrace{\overbrace{\BB{0},1,\ldots,n - 1}^{\text{$n$ values}}}_{\text{mapped to $n$}},\ldots,\underbrace{\overbrace{\BB{0},1,\ldots,n - 1}^{\text{$n$ values}}}_{\substack{\text{mapped to} \\ 2^W - n - \RNW}}}^{\text{$\left(2^W \div n\right) \cdot n$ values}},\ER{\overbrace{0,1,\ldots,\RNW - 1}^{\text{$\RNW$ values}}}
+        \end{align*}} \only<7->{\begin{align*}\everymath{} % Allows specific coloring
+            \overbrace{\underbrace{\overbrace{\BB{0},1,\ldots,n - 1}^{\text{$n$ values}}}_{\text{mapped to $0$}},\underbrace{\overbrace{\BB{0},1,\ldots,n - 1}^{\text{$n$ values}}}_{\text{mapped to $n$}},\ldots,\underbrace{\overbrace{\BB{0},1,\ldots,n - 1}^{\text{$n$ values}}}_{\substack{\text{mapped to} \\ 2^W - n - \RNW}}}^{\text{$\left(2^W \div n\right) \cdot n$ values}},\ER{\underbrace{\overbrace{\BB{0},1,\ldots,\RNW - 1}^{\text{$\RNW$ values}}}_{\substack{\text{mapped to} \\ 2^W - \RNW}}}
+        \end{align*}}
+        \item<8-> Only numbers in the \ER{leftover} interval get mapped to $\ER{2^W - \RNW} > 2^W - n$
+        \item<9-> Algorithm: \begin{itemize}
+            \item[(1)]<10-> Draw $x \in [0,2^W)$ and compute $r = x \Mod n$
+            \item[(2)]<11-> Return $r$ if $x - r > 2^W - n$ else goto \textbf{\GB{(1)}}
+        \end{itemize}
+    \end{itemize}
 \end{frame}
 
+\begin{frame}{The Java Algorithm}
+    Algorithm: \begin{itemize}
+        \item[(1)] Draw $x \in [0,2^W)$ and compute $r = x \Mod n$
+        \item[(2)] Return $r$ if $x - r > 2^W - n$ else goto \textbf{\GB{(1)}}
+    \end{itemize}
+    \pause 
+    \begin{block}{Efficiency}<+->
+        \begin{itemize}[<+->]
+            \item At least one integer division operation
+            \item Number of integer divisions operations equal to number of \GB{rounds}
+            \item Return a number in \GB{round} if $x < 2^W - \RNW$
+            \item Happens with probability $\frac{2^W - \RNW}{2^W} > \frac{1}{2}$
+            \item Expected number of integer division operations is $\frac{2^W}{2^W - \RNW} < 2$
+        \end{itemize}
+    \end{block}
+
+\end{frame}
 
 
 \subsection{The Fast-Dice-Roller Algorithm}
 \begin{frame}{The Fast-Dice-Roller Algorithm}
     \pause 
-    
 
 \end{frame}
 
