@@ -1,6 +1,6 @@
 \section{Unbiased Algorithms}
 
-\subsection{The OpenBSD Algorithm}
+\subsection{The OpenBSD Algorithm}\label{sec:2.1}
 \begin{frame}{The OpenBSD Algorithm}
     \pause 
     \begin{itemize}[<+->]
@@ -20,26 +20,9 @@
 
 \end{frame}
 
-%%% Array Drawing with Tikz instead of Equation
-\iffalse
-\onslide<+->{\begin{center}
-    \begin{tikzpicture}[scale = 0.7]
-        \draw[draw = goetheblau] (0.0,0.0) rectangle ++(5.0,1.0);
-        \draw[draw = goetheblau,overbrace style] (0.0,1.0) -- (5.0,1.0) node [overbrace text style] {\GB{$n$ values}};
-        \draw[draw = goetheblau] (5.0,0.0) rectangle ++(5.0,1.0);
-        \draw[draw = goetheblau,overbrace style] (5.0,1.0) -- (10.0,1.0) node [overbrace text style] {\GB{$n$ values}};
-        \node at (10.5,0.5) {$\cdots$};
-        \draw[draw = goetheblau] (11.0,0.0) rectangle ++(5.0,1.0);
-        \draw[draw = goetheblau,overbrace style] (11.0,1.0) -- (16.0,1.0) node [overbrace text style] {\GB{$n$ values}};
-        \draw[draw = emorot] (16.0,0.0) rectangle ++(3.0,1.0);
-        \draw[draw = emorot,overbrace style] (16.0,1.0) -- (19.0,1.0) node [overbrace text style] {$\text{\ER{\RNW values}}$};
-    \end{tikzpicture}
-\end{center}}
-\fi 
 
 
-
-\subsection{The Java Algorithm}
+\subsection{The Java Algorithm}\label{sec:2.2}
 \begin{frame}{The Java Algorithm}
     \pause 
     \begin{itemize}
@@ -54,10 +37,11 @@
         \end{align*}} \only<7->{\begin{align*}\everymath{} % Allows specific coloring
             \overbrace{\underbrace{\overbrace{\BB{0},1,\ldots,n - 1}^{\text{$n$ values}}}_{\text{mapped to $0$}},\underbrace{\overbrace{\BB{0},1,\ldots,n - 1}^{\text{$n$ values}}}_{\text{mapped to $n$}},\ldots,\underbrace{\overbrace{\BB{0},1,\ldots,n - 1}^{\text{$n$ values}}}_{\substack{\text{mapped to} \\ 2^W - n - \RNW}}}^{\text{$\left(2^W \div n\right) \cdot n$ values}},\ER{\underbrace{\overbrace{\BB{0},1,\ldots,\RNW - 1}^{\text{$\RNW$ values}}}_{\substack{\text{mapped to} \\ 2^W - \RNW}}}
         \end{align*}}
-        \item<8-> Only numbers in the \ER{leftover} interval get mapped to $\ER{2^W - \RNW} > 2^W - n$
-        \item<9-> Algorithm: \begin{itemize}
-            \item[(1)]<10-> Draw $x \in [0,2^W)$ and compute $r = x \Mod n$
-            \item[(2)]<11-> Return $r$ if $x - r > 2^W - n$ else goto \textbf{\GB{(1)}}
+        \item<8-> We map every number to the next-smallest multiple of $n$
+        \item<9-> Only numbers in the \ER{leftover} interval get mapped to $\ER{2^W - \RNW} > 2^W - n$
+        \item<10-> Algorithm: \begin{itemize}
+            \item[(1)]<11-> Draw $x \in [0,2^W)$ and compute $r = x \Mod n$
+            \item[(2)]<12-> Return $r$ if $x - r > 2^W - n$ else goto \textbf{\GB{(1)}}
         \end{itemize}
     \end{itemize}
 \end{frame}
@@ -81,17 +65,46 @@
 \end{frame}
 
 
-\subsection{The Fast-Dice-Roller Algorithm}
-\begin{frame}{The Fast-Dice-Roller Algorithm}
-    \pause 
 
-\end{frame}
-
-
-
-\subsection{The Bitmask Algorithm}
+\subsection{The Bitmask Algorithm}\label{sec:2.3}
 \begin{frame}{The Bitmask Algorithm}
     \pause 
     
 
 \end{frame}
+
+
+
+
+
+
+%%% Array Drawing with Tikz instead of Equation + FastDiceRoller
+\iffalse
+\onslide<+->{\begin{center}
+    \begin{tikzpicture}[scale = 0.7]
+        \draw[draw = goetheblau] (0.0,0.0) rectangle ++(5.0,1.0);
+        \draw[draw = goetheblau,overbrace style] (0.0,1.0) -- (5.0,1.0) node [overbrace text style] {\GB{$n$ values}};
+        \draw[draw = goetheblau] (5.0,0.0) rectangle ++(5.0,1.0);
+        \draw[draw = goetheblau,overbrace style] (5.0,1.0) -- (10.0,1.0) node [overbrace text style] {\GB{$n$ values}};
+        \node at (10.5,0.5) {$\cdots$};
+        \draw[draw = goetheblau] (11.0,0.0) rectangle ++(5.0,1.0);
+        \draw[draw = goetheblau,overbrace style] (11.0,1.0) -- (16.0,1.0) node [overbrace text style] {\GB{$n$ values}};
+        \draw[draw = emorot] (16.0,0.0) rectangle ++(3.0,1.0);
+        \draw[draw = emorot,overbrace style] (16.0,1.0) -- (19.0,1.0) node [overbrace text style] {$\text{\ER{\RNW values}}$};
+    \end{tikzpicture}
+\end{center}}
+
+\subsection{The Fast-Dice-Roller Algorithm}
+\begin{frame}{The Fast-Dice-Roller Algorithm}
+    \pause 
+    \begin{itemize}[<+->]
+        \item Build up $x$ bit-by-bit using uniform random bits \GB{\texttt{flip()}}
+        \item Keep track of upper bound $\mathcal{B}$ for number \onslide<+->{  $\longrightarrow \quad x \in [0,\mathcal{B})$}
+        \item Repeat until $\mathcal{B} \geq n$ \begin{itemize}[<+->]
+            \item if $x < n$, return $x$
+            \item else decrease $x$ and $\mathcal{B}$ by $n$ (\ER{rejection})
+        \end{itemize}
+    \end{itemize}
+
+\end{frame}
+\fi 
