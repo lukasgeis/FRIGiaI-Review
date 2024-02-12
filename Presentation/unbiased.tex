@@ -137,7 +137,7 @@
         \end{align*}} 
         \item $\ER{\lfloor\log_2n\rfloor} = W - \ell - 1$ \onslide<+->{$\qquad \longrightarrow \qquad 2^{\lfloor\log_2n\rfloor + 1} = 1 \ll \left(W - \ell\right)$}
         \item Algorithm: \begin{itemize}[<+->]
-            \item[(1)] Compute $\ell$ and then $\mathcal{M} = 2^{\lfloor\log_2n\rfloor + 1} - 1$
+            \item[(1)] Compute $\ell$ and $\mathcal{M} = 2^{\lfloor\log_2n\rfloor + 1} - 1$
             \item[(2)] Draw $x \in [0,2^W)$ and compute $b = x \And \mathcal{M}$
             \item[(3)] Return $b$ if $b < n$ else goto \textbf{\GB{(2)}}
         \end{itemize}
@@ -146,7 +146,7 @@
 
 \begin{frame}{The Bitmask Algorithm}
     Algorithm: \begin{itemize}
-        \item[(1)] Compute $\ell$ and then $\mathcal{M} = 2^{\lfloor\log_2n\rfloor + 1} - 1$
+        \item[(1)] Compute $\ell$ and $\mathcal{M} = 2^{\lfloor\log_2n\rfloor + 1} - 1$
         \item[(2)] Draw $x \in [0,2^W)$ and compute $b = x \And \mathcal{M}$
         \item[(3)] Return $b$ if $b < n$ else goto \textbf{\GB{(2)}}
     \end{itemize}
@@ -154,10 +154,10 @@
     \smallskip
     \begin{block}{Efficiency}<+->
         \begin{itemize}[<+->]
-            \item $b$ is at most $\mathcal{M} = 2^{\lfloor\log_2n\rfloor + 1} - 1 < 2n$ \onslide<+->{$\quad \longrightarrow \quad$ success probability at least $\approx \frac{1}{2}$}
+            \item $b$ at most $\mathcal{M} = 2^{\lfloor\log_2n\rfloor + 1} - 1 < 2n$ \onslide<+->{$\quad \longrightarrow \quad$ success probability at least $\approx \frac{1}{2}$}
             \item At most $2$ rounds in expectation
             \item \GB{No} integer division at all
-            \item Computation of \GB{leading $0$'s} needs \GB{\texttt{clz}} instruction 
+            \item Computation of \GB{leading $0$'s} requires \GB{\texttt{clz}} instruction/algorithm 
             \item Roughly as expensive as a \GB{\texttt{div}} instruction 
         \end{itemize}
     \end{block}
