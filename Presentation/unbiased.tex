@@ -8,16 +8,29 @@
         \onslide<+->{\begin{align*}\everymath{} % Allows specific coloring
             \overbrace{\ER{\underbrace{0,1,\ldots,\RNW - 1}_{\text{$\RNW$ values}}},\underbrace{\overbrace{\RNW,\ldots,n - 1,0,\ldots,\RNW - 1}^{\text{$n$ values}},\ldots,\overbrace{\RNW,\ldots,n - 1,0,\ldots,\RNW - 1}^{\text{$n$ values}}}_{\text{$\left(2^W \div n\right) \cdot n$ values}}}^{\text{$2^W$ values}}
         \end{align*}}
-        \item Generate a uniform random number $x \in [0,2^W)$ until $x \geq \RNW$
-        \item Return $x \Mod n$
+        \item Algorithm: \begin{itemize}[<+->]
+            \item Generate a uniform random number $x \in [0,2^W)$ until $x \geq \RNW$
+            \item Return $x \Mod n$
+        \end{itemize} 
     \end{itemize}
 
-    \begin{block}{Efficiency}<+->
-        \onslide<+->{We require $2$ integer division operations:}
-        \onslide<+->{one for computing $\RNW$}
-        \onslide<+->{and one for computing $x \Mod n$.}
-    \end{block}
+\end{frame}
 
+\begin{frame}{The OpenBSD Algorithm}
+    Algorithm: \begin{itemize}
+        \item Generate a uniform random number $x \in [0,2^W)$ until $x \geq \RNW$
+        \item Return $x \Mod n$
+    \end{itemize} 
+    \pause 
+    \smallskip
+    \begin{block}{Efficiency}<+->
+        \onslide<+->{We require $2$ integer division operations:} \begin{itemize}[<+->]
+            \item one for computing $\RNW$
+            \item and one for computing $x \Mod n$.
+        \end{itemize}
+    \end{block}
+    \vspace*{0.5cm} 
+    \onslide<+->{Can we do better?}
 \end{frame}
 
 
@@ -52,6 +65,7 @@
         \item[(2)] Return $r$ if $x - r > 2^W - n$ else goto \textbf{\GB{(1)}}
     \end{itemize}
     \pause 
+    \smallskip
     \begin{block}{Efficiency}<+->
         \begin{itemize}[<+->]
             \item At least one integer division operation
@@ -61,7 +75,6 @@
             \item Expected number of integer division operations is $\frac{2^W}{2^W - \RNW} < 2$
         \end{itemize}
     \end{block}
-
 \end{frame}
 
 
@@ -69,10 +82,45 @@
 \subsection{The Bitmask Algorithm}\label{sec:2.3}
 \begin{frame}{The Bitmask Algorithm}
     \pause 
-    
-
+    \begin{itemize}[<+->]
+        \item Consider the \GB{binary} representation of $n$: \onslide<+->{\begin{align*}\everymath{}
+            \underbrace{
+                \overbrace{0}^{
+                    \hidewidth 2^{W - 1} \hidewidth 
+                },\ldots,0
+            }_{\text{only $0$'s}},\ER{\overbrace{1}^{
+                 2^{\lfloor\log_2n\rfloor}
+            }},\underbrace{
+                \nicefrac{0}{1},\ldots,\overbrace{
+                    \nicefrac{0}{1}
+                }^{ 2^1 },\overbrace{
+                    \nicefrac{0}{1}
+                }^{ 2^0 }
+            }_{\text{series of $0$'s and $1$'s}}
+        \end{align*}} 
+        \item Every number $x \leq n$ only needs the last $\lfloor\log_2n\rfloor + 1$ bits
+        \item Get these bits with a bitwise-\textsc{And} with $2^{\lfloor\log_2n\rfloor + 1} - 1$: \onslide<+->{\begin{align*}\everymath{}
+            \underbrace{
+                \overbrace{0}^{
+                    \hidewidth 2^{W - 1} \hidewidth 
+                },\ldots,0
+            }_{\text{only $0$'s}},\underbrace{\ER{\overbrace{1}^{
+                 2^{\lfloor\log_2n\rfloor}
+            }},1,\ldots,\overbrace{
+                    1
+                }^{ 2^1 },\overbrace{
+                    1
+                }^{ 2^0 }
+            }_{\text{only $1$'s}}
+        \end{align*}}
+        \item Every resulting number $x \And \left(2^{\lfloor\log_2n\rfloor + 1} - 1\right)$ is at most \onslide<+->{$2^{\lfloor\log_2n\rfloor + 1} - 1 < 2n$}
+    \end{itemize}
 \end{frame}
 
+\begin{frame}{The Bitmask Algorithm}
+    \pause 
+    
+\end{frame}
 
 
 
