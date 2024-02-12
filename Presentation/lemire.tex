@@ -3,10 +3,33 @@
 \subsection{Multiply-And-Shift}\label{sec:3.1}
 \begin{frame}{Multiply-And-Shift}
     \pause 
-    \onslide<+->{\begin{center}
-        $\left(\texttt{rand()} \cdot n\right) \gg W$ \onslide<+->{$ = \left(\texttt{rand()} \cdot n\right) \div 2^W$}
-    \end{center}}
-
+    \begin{itemize}
+        \item Map $\texttt{rand()}$ to $[0,n)$ divisionless with $(\texttt{rand()} \cdot n) \gg W$:
+        \only<3>{\begin{align*}\large
+            (\texttt{rand()} \cdot n) \gg W 
+        \end{align*}} 
+        \only<4>{\begin{align*}\large
+            (\texttt{rand()} \cdot n) \div 2^W 
+        \end{align*}}
+        \only<5>{\begin{align*}\large
+            (\underbrace{\texttt{rand()}}_{\in [0,2^W)} \cdot n) \div W  
+        \end{align*}}
+        \only<6-8>{\begin{align*}\large
+            \underbrace{(\texttt{rand()} \cdot n)}_{\in [0,n \cdot 2^W)} \div W  
+        \end{align*}}
+        \only<9->{\begin{align*}\large
+            \underbrace{(\texttt{rand()} \cdot n) \div W }_{\in [0,n)}
+        \end{align*}}
+        \item<7-> $n < 2^W \Longrightarrow n \cdot 2^W < 2^W \cdot 2^W = 2^{2W}$
+        \item<8-> $2W$ bits enough to represent $\texttt{rand()} \cdot n$  
+    \end{itemize}
+    \vspace*{0.5cm}
+    \begin{block}{Is this uniform?}<10->
+        \begin{itemize}
+            \item<11-> Mapping is deterministic!
+            \item<12-> Mapping can \GB{not} be uniform for all $n$!
+        \end{itemize}
+    \end{block}
 \end{frame}
 
 \subsection{The Algorithm}\label{sec:3.2}

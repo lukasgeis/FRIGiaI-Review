@@ -50,8 +50,8 @@
         \end{align*}} \only<7->{\begin{align*}\everymath{} % Allows specific coloring
             \overbrace{\underbrace{\overbrace{\BB{0},1,\ldots,n - 1}^{\text{$n$ values}}}_{\text{mapped to $0$}},\underbrace{\overbrace{\BB{0},1,\ldots,n - 1}^{\text{$n$ values}}}_{\text{mapped to $n$}},\ldots,\underbrace{\overbrace{\BB{0},1,\ldots,n - 1}^{\text{$n$ values}}}_{\substack{\text{mapped to} \\ 2^W - n - \RNW}}}^{\text{$\left(2^W \div n\right) \cdot n$ values}},\ER{\underbrace{\overbrace{\BB{0},1,\ldots,\RNW - 1}^{\text{$\RNW$ values}}}_{\substack{\text{mapped to} \\ 2^W - \RNW}}}
         \end{align*}}
-        \item<8-> We map every number to the next-smallest multiple of $n$
-        \item<9-> Only numbers in the \ER{leftover} interval get mapped to $\ER{2^W - \RNW} > 2^W - n$
+        \item<8-> Map every number to the next-smallest multiple of $n$
+        \item<9-> Only numbers in \ER{leftover} interval mapped to $\ER{2^W - \RNW} > 2^W - n$
         \item<10-> Algorithm: \begin{itemize}
             \item[(1)]<11-> Draw $x \in [0,2^W)$ and compute $r = x \Mod n$
             \item[(2)]<12-> Return $r$ if $x - r > 2^W - n$ else goto \textbf{\GB{(1)}}
@@ -70,7 +70,7 @@
         \begin{itemize}[<+->]
             \item At least one integer division operation
             \item Number of integer divisions operations equal to number of \GB{rounds}
-            \item Return a number in \GB{round} if $x < 2^W - \RNW$
+            \item Return number in \GB{round} if $x < 2^W - \RNW$
             \item Happens with probability $\frac{2^W - \RNW}{2^W} > \frac{1}{2}$
             \item Expected number of integer division operations is $\frac{2^W}{2^W - \RNW} < 2$
         \end{itemize}
