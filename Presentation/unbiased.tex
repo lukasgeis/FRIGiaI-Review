@@ -84,7 +84,7 @@
     \pause 
     \begin{itemize}[<+->]
         \item Consider the \GB{binary} representation of $n$: \onslide<+->{\begin{align*}\everymath{}
-            \underbrace{
+            n \quad \stackrel{\text{binary}}{\longrightarrow} \qquad \underbrace{
                 \overbrace{0}^{
                     \hidewidth 2^{W - 1} \hidewidth 
                 },\ldots,0
@@ -99,8 +99,8 @@
             }_{\text{series of $0$'s and $1$'s}}
         \end{align*}} 
         \item Every number $x \leq n$ only needs the last $\lfloor\log_2n\rfloor + 1$ bits
-        \item Get these bits with a bitwise-\textsc{And} with $2^{\lfloor\log_2n\rfloor + 1} - 1$: \onslide<+->{\begin{align*}\everymath{}
-            \underbrace{
+        \item Get these bits with a bitwise-\textsc{And} with \begin{align*}\everymath{}
+            2^{\lfloor\log_2n\rfloor + 1} - 1 \quad \stackrel{\text{binary}}{\longrightarrow} \qquad \underbrace{
                 \overbrace{0}^{
                     \hidewidth 2^{W - 1} \hidewidth 
                 },\ldots,0
@@ -112,14 +112,55 @@
                     1
                 }^{ 2^0 }
             }_{\text{only $1$'s}}
-        \end{align*}}
-        \item Every resulting number $x \And \left(2^{\lfloor\log_2n\rfloor + 1} - 1\right)$ is at most \onslide<+->{$2^{\lfloor\log_2n\rfloor + 1} - 1 < 2n$}
+        \end{align*}
     \end{itemize}
 \end{frame}
 
 \begin{frame}{The Bitmask Algorithm}
     \pause 
-    
+    \begin{itemize}[<+->]
+        \item How can we compute $2^{\lfloor\log_2n\rfloor + 1}$? 
+        \item \GB{Count} the number $\ell$ of \GB{leading $0$'s}! \onslide<+->{\begin{align*}\everymath{}
+            n \quad \stackrel{\text{binary}}{\longrightarrow} \qquad \underbrace{
+                \overbrace{0}^{
+                    \hidewidth 2^{W - 1} \hidewidth 
+                },\ldots,0
+            }_{\text{$\ell$ $0$'s}},\ER{\overbrace{1}^{
+                 2^{\lfloor\log_2n\rfloor}
+            }},\underbrace{
+                \nicefrac{0}{1},\ldots,\overbrace{
+                    \nicefrac{0}{1}
+                }^{ 2^1 },\overbrace{
+                    \nicefrac{0}{1}
+                }^{ 2^0 }
+            }_{\text{series of $0$'s and $1$'s}}
+        \end{align*}} 
+        \item $\ER{\lfloor\log_2n\rfloor} = W - \ell - 1$ \onslide<+->{$\qquad \longrightarrow \qquad 2^{\lfloor\log_2n\rfloor + 1} = 1 \ll \left(W - \ell\right)$}
+        \item Algorithm: \begin{itemize}[<+->]
+            \item[(1)] Compute $\ell$ and then $\mathcal{M} = 2^{\lfloor\log_2n\rfloor + 1} - 1$
+            \item[(2)] Draw $x \in [0,2^W)$ and compute $b = x \And \mathcal{M}$
+            \item[(3)] Return $b$ if $b < n$ else goto \textbf{\GB{(2)}}
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{The Bitmask Algorithm}
+    Algorithm: \begin{itemize}
+        \item[(1)] Compute $\ell$ and then $\mathcal{M} = 2^{\lfloor\log_2n\rfloor + 1} - 1$
+        \item[(2)] Draw $x \in [0,2^W)$ and compute $b = x \And \mathcal{M}$
+        \item[(3)] Return $b$ if $b < n$ else goto \textbf{\GB{(2)}}
+    \end{itemize}
+    \pause 
+    \smallskip
+    \begin{block}{Efficiency}<+->
+        \begin{itemize}[<+->]
+            \item $b$ is at most $\mathcal{M} = 2^{\lfloor\log_2n\rfloor + 1} - 1 < 2n$ \onslide<+->{$\quad \longrightarrow \quad$ success probability at least $\approx \frac{1}{2}$}
+            \item At most $2$ rounds in expectation
+            \item \GB{No} integer division at all
+            \item Computation of \GB{leading $0$'s} needs \GB{\texttt{clz}} instruction 
+            \item Roughly as expensive as a \GB{\texttt{div}} instruction 
+        \end{itemize}
+    \end{block}
 \end{frame}
 
 
