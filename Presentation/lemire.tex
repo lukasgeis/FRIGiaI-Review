@@ -12,13 +12,13 @@
             (\texttt{rand()} \cdot n) \div 2^W 
         \end{align*}}
         \only<5>{\begin{align*}\large
-            (\underbrace{\texttt{rand()}}_{\in [0,2^W)} \cdot n) \div W  
+            (\underbrace{\texttt{rand()}}_{{} \in [0,2^W)} \cdot n) \div 2^W  
         \end{align*}}
         \only<6-8>{\begin{align*}\large
-            \underbrace{(\texttt{rand()} \cdot n)}_{\in [0,n \cdot 2^W)} \div W  
+            \underbrace{(\texttt{rand()} \cdot n)}_{{} \in [0,n \cdot 2^W)} \div 2^W  
         \end{align*}}
         \only<9->{\begin{align*}\large
-            \underbrace{(\texttt{rand()} \cdot n) \div W }_{\in [0,n)}
+            \underbrace{(\texttt{rand()} \cdot n) \div 2^W}_{{} \in [0,n)}
         \end{align*}}
         \item<7-> $n < 2^W \Longrightarrow n \cdot 2^W < 2^W \cdot 2^W = 2^{2W}$
         \item<8-> $2W$ bits enough to represent $\texttt{rand()} \cdot n$  

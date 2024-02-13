@@ -21,7 +21,7 @@
     \onslide<+->{We can map this to our setting by subtracting $a$!}
     \begin{itemize}[<+->]
         \item Set $n = b - a$ and draw a uniform random integer $x \in [0,n)$
-        \item Return $x + a$
+        \item Return $x + a \in [a,b)$
     \end{itemize}
 \end{frame}
 
@@ -90,11 +90,11 @@
 
     \vspace*{0.5cm}
 
-    \onslide<+->{\GB{Every} approach that maps every integer in $[0,2^W)$ to a single number in $[0,n)$}
-    \onslide<+->{does \ER{not} generate uniform random integers in one step}
-    \onslide<+->{whenever $n$ does not divide $2^W$.}
-
-    \vspace*{0.5cm}
-
+    \begin{block}{Deterministic Mappings}<+->
+        \onslide<+->{\GB{Every} deterministic mapping $f\colon[0,2^W) \rightarrow [0,n)$}
+        \onslide<+->{does \ER{not} generate \GB{uniform} random integers in one step}
+        \onslide<+->{whenever $n$ does not divide $2^W$.}
+    \end{block}
+    \smallskip
     \onslide<+->{\GB{Idea:} Use \ER{rejection sampling} to achieve uniformity!}
 \end{frame}

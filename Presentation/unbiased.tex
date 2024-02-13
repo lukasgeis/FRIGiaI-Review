@@ -4,7 +4,7 @@
 \begin{frame}{The OpenBSD Algorithm}
     \pause 
     \begin{itemize}[<+->]
-        \item We shift the \ER{rejection interval} to the left:
+        \item Shift the \ER{rejection interval} to the left:
         \onslide<+->{\begin{align*}\everymath{} % Allows specific coloring
             \overbrace{\ER{\underbrace{0,1,\ldots,\RNW - 1}_{\text{$\RNW$ values}}},\underbrace{\overbrace{\RNW,\ldots,n - 1,0,\ldots,\RNW - 1}^{\text{$n$ values}},\ldots,\overbrace{\RNW,\ldots,n - 1,0,\ldots,\RNW - 1}^{\text{$n$ values}}}_{\text{$\left(2^W \div n\right) \cdot n$ values}}}^{\text{$2^W$ values}}
         \end{align*}}
@@ -22,15 +22,13 @@
         \item Return $x \Mod n$
     \end{itemize} 
     \pause 
-    \smallskip
+    \vspace*{0.5cm}
     \begin{block}{Efficiency}<+->
         \onslide<+->{We require $2$ integer division operations:} \begin{itemize}[<+->]
             \item one for computing $\RNW$
             \item and one for computing $x \Mod n$.
         \end{itemize}
     \end{block}
-    \vspace*{0.5cm} 
-    \onslide<+->{Can we do better?}
 \end{frame}
 
 
@@ -84,7 +82,7 @@
     \pause 
     \begin{itemize}[<+->]
         \item Consider the \GB{binary} representation of $n$: \onslide<+->{\begin{align*}\everymath{}
-            n \quad \stackrel{\text{binary}}{\longrightarrow} \qquad \underbrace{
+            n \quad \xrightarrow{\text{binary}} \qquad \underbrace{
                 \overbrace{0}^{
                     \hidewidth 2^{W - 1} \hidewidth 
                 },\ldots,0
@@ -100,7 +98,7 @@
         \end{align*}} 
         \item Every number $x \leq n$ only needs the last $\lfloor\log_2n\rfloor + 1$ bits
         \item Get these bits with a bitwise-\textsc{And} with \begin{align*}\everymath{}
-            2^{\lfloor\log_2n\rfloor + 1} - 1 \quad \stackrel{\text{binary}}{\longrightarrow} \qquad \underbrace{
+            2^{\lfloor\log_2n\rfloor + 1} - 1 \quad \xrightarrow{\text{binary}} \qquad \underbrace{
                 \overbrace{0}^{
                     \hidewidth 2^{W - 1} \hidewidth 
                 },\ldots,0
@@ -121,7 +119,7 @@
     \begin{itemize}[<+->]
         \item How can we compute $2^{\lfloor\log_2n\rfloor + 1}$? 
         \item \GB{Count} the number $\ell$ of \GB{leading $0$'s}! \onslide<+->{\begin{align*}\everymath{}
-            n \quad \stackrel{\text{binary}}{\longrightarrow} \qquad \underbrace{
+            n \quad \xrightarrow{\text{binary}} \qquad \underbrace{
                 \overbrace{0}^{
                     \hidewidth 2^{W - 1} \hidewidth 
                 },\ldots,0
@@ -155,7 +153,7 @@
     \begin{block}{Efficiency}<+->
         \begin{itemize}[<+->]
             \item $b$ at most $\mathcal{M} = 2^{\lfloor\log_2n\rfloor + 1} - 1 < 2n$ \onslide<+->{$\quad \longrightarrow \quad$ success probability at least $\approx \frac{1}{2}$}
-            \item At most $2$ rounds in expectation
+            \item At most $\approx 2$ rounds in expectation
             \item \GB{No} integer division at all
             \item Computation of \GB{leading $0$'s} requires \GB{\texttt{clz}} instruction/algorithm 
             \item Roughly as expensive as a \GB{\texttt{div}} instruction 
