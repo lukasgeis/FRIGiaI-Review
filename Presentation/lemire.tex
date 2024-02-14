@@ -35,6 +35,44 @@
 \subsection{The Algorithm}\label{sec:3.2}
 \begin{frame}{The Algorithm}
     \pause 
-    
+    \begin{itemize}[<+->]
+        \item Split $[0,n \cdot 2^W)$ into intervals $[i \cdot 2^W, (i + 1) \cdot 2^W)$ for $i < n$ 
+        \item Every integer in the $i$\textsuperscript{th} interval $[i \cdot 2^W, (i + 1) \cdot 2^W)$ is mapped to $i$ by $\gg W$
+        \item Define the \GB{restricted} $i$\textsuperscript{th} interval as $[i \cdot 2^W + \RNW, (i + 1) \cdot 2^W)$
+        \item This interval has size \begin{align*}
+            (i + 1) \cdot 2^W - \left(i \cdot 2^W + \RNW\right) = 2^W - \RNW
+        \end{align*} \onslide<+->{which is divisible by $n$}
+        \item Every \GB{restricted} $i$\textsuperscript{th} interval has the same number of multiples of $n$
+        \item We can make \GB{Multiply-And-Shift} uniform by rejecting multiple of $n$ in every \GB{restricted} $i$\textsuperscript{th} interval 
+    \end{itemize}
 
+\end{frame}
+
+\begin{frame}{The Algorithm - Rejection}
+    \pause 
+    \begin{block}{When do we reject $\textcolor{white}{\boldmath{x \coloneqq \texttt{rand()} \cdot n}}$?}<+->
+        \begin{itemize}[<+->]
+            \item $x \in [i \cdot 2^W + \RNW, (i + 1) \cdot 2^W)$ for some $i < n$
+            \item Applying $x \Mod 2^W$ to any $i$\textsuperscript{th} interval yields \onslide<+->{\begin{align*}\everymath{} % Allows specific coloring
+                \overbrace{\ER{\underbrace{0,1,\ldots,\RNW - 1}_{\text{rejected part}}},\underbrace{\RNW,\ldots,n,\ldots,2^W - 1}_{\text{restricted $i$\textsuperscript{th} interval}}}^{\text{$2^W$ values}}
+            \end{align*}}
+            \item We \ER{reject} $x$ if $x \Mod 2^W < \RNW$
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{The Algorithm - Sketch}
+    \pause 
+    \begin{algorithm}[H]
+        \DontPrintSemicolon
+        \onslide<+->{$\RNW \leftarrow 2^W \Mod n$\tcc*[r]{Compute \ER{rejection} threshold}}
+        \onslide<+->{\While{\emph{\GB{true}}}{
+            \onslide<+->{$x \leftarrow \texttt{rand()}$\;}
+            \onslide<+->{$m \leftarrow x \cdot n$\tcc*[r]{Use $2W$ bits for representation}}
+            \onslide<+->{$l \leftarrow m \And \left(2^W - 1\right)$\tcc*[r]{$m \Mod 2^W$}}
+            \onslide<+->{\If{$l \geq \RNW$}{
+                \onslide<+->{\KwRet{$m \gg W$}\;}
+            }}
+        }}
+    \end{algorithm}
 \end{frame}
