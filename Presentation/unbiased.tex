@@ -16,7 +16,7 @@
 
 \end{frame}
 
-\begin{frame}{The OpenBSD Algorithm}
+\begin{frame}{The OpenBSD Algorithm - Efficiency}
     Algorithm: \begin{itemize}
         \item Generate a uniform random number $x \in [0,2^W)$ until $x \geq \RNW$
         \item Return $x \Mod n$
@@ -52,15 +52,15 @@
         \item<9-> Only numbers in \ER{leftover} interval mapped to $\ER{2^W - \RNW} > 2^W - n$
         \item<10-> Algorithm: \begin{itemize}
             \item[(1)]<11-> Draw $x \in [0,2^W)$ and compute $r = x \Mod n$
-            \item[(2)]<12-> Return $r$ if $x - r > 2^W - n$ else goto \textbf{\GB{(1)}}
+            \item[(2)]<12-> Return $r$ if $x - r \leq 2^W - n$ else goto \textbf{\GB{(1)}}
         \end{itemize}
     \end{itemize}
 \end{frame}
 
-\begin{frame}{The Java Algorithm}
+\begin{frame}{The Java Algorithm - Efficiency}
     Algorithm: \begin{itemize}
         \item[(1)] Draw $x \in [0,2^W)$ and compute $r = x \Mod n$
-        \item[(2)] Return $r$ if $x - r > 2^W - n$ else goto \textbf{\GB{(1)}}
+        \item[(2)] Return $r$ if $x - r \leq 2^W - n$ else goto \textbf{\GB{(1)}}
     \end{itemize}
     \pause 
     \smallskip
@@ -78,7 +78,7 @@
 
 
 \subsection{The Bitmask Algorithm}\label{sec:2.3}
-\begin{frame}{The Bitmask Algorithm}
+\begin{frame}{The Bitmask Algorithm - Representation}
     \pause 
     \begin{itemize}[<+->]
         \item Consider the \GB{binary} representation of $n$: \onslide<+->{\begin{align*}\everymath{}
@@ -114,11 +114,11 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{The Bitmask Algorithm}
+\begin{frame}{The Bitmask Algorithm - Mask}
     \pause 
     \begin{itemize}[<+->]
         \item How can we compute $2^{\lfloor\log_2n\rfloor + 1}$? 
-        \item \GB{Count} the number $\ell$ of \GB{leading $0$'s}! \onslide<+->{\begin{align*}\everymath{}
+        \item \GB{Count} the number $\ell$ of \GB{leading $0$'s} in $n$! \onslide<+->{\begin{align*}\everymath{}
             n \quad \xrightarrow{\text{binary}} \qquad \underbrace{
                 \overbrace{0}^{
                     \hidewidth 2^{W - 1} \hidewidth 
@@ -142,7 +142,7 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{The Bitmask Algorithm}
+\begin{frame}{The Bitmask Algorithm - Efficiency}
     Algorithm: \begin{itemize}
         \item[(1)] Compute $\ell$ and $\mathcal{M} = 2^{\lfloor\log_2n\rfloor + 1} - 1$
         \item[(2)] Draw $x \in [0,2^W)$ and compute $b = x \And \mathcal{M}$
@@ -160,38 +160,3 @@
         \end{itemize}
     \end{block}
 \end{frame}
-
-
-
-
-
-%%% Array Drawing with Tikz instead of Equation + FastDiceRoller
-\iffalse
-\onslide<+->{\begin{center}
-    \begin{tikzpicture}[scale = 0.7]
-        \draw[draw = goetheblau] (0.0,0.0) rectangle ++(5.0,1.0);
-        \draw[draw = goetheblau,overbrace style] (0.0,1.0) -- (5.0,1.0) node [overbrace text style] {\GB{$n$ values}};
-        \draw[draw = goetheblau] (5.0,0.0) rectangle ++(5.0,1.0);
-        \draw[draw = goetheblau,overbrace style] (5.0,1.0) -- (10.0,1.0) node [overbrace text style] {\GB{$n$ values}};
-        \node at (10.5,0.5) {$\cdots$};
-        \draw[draw = goetheblau] (11.0,0.0) rectangle ++(5.0,1.0);
-        \draw[draw = goetheblau,overbrace style] (11.0,1.0) -- (16.0,1.0) node [overbrace text style] {\GB{$n$ values}};
-        \draw[draw = emorot] (16.0,0.0) rectangle ++(3.0,1.0);
-        \draw[draw = emorot,overbrace style] (16.0,1.0) -- (19.0,1.0) node [overbrace text style] {$\text{\ER{\RNW values}}$};
-    \end{tikzpicture}
-\end{center}}
-
-\subsection{The Fast-Dice-Roller Algorithm}
-\begin{frame}{The Fast-Dice-Roller Algorithm}
-    \pause 
-    \begin{itemize}[<+->]
-        \item Build up $x$ bit-by-bit using uniform random bits \GB{\texttt{flip()}}
-        \item Keep track of upper bound $\mathcal{B}$ for number \onslide<+->{  $\longrightarrow \quad x \in [0,\mathcal{B})$}
-        \item Repeat until $\mathcal{B} \geq n$ \begin{itemize}[<+->]
-            \item if $x < n$, return $x$
-            \item else decrease $x$ and $\mathcal{B}$ by $n$ (\ER{rejection})
-        \end{itemize}
-    \end{itemize}
-
-\end{frame}
-\fi 
