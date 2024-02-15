@@ -75,7 +75,7 @@
     \pause 
     \begin{block}{When do we reject $\textcolor{white}{\boldmath{x \coloneqq \texttt{rand()} \cdot n}}$?}<+->
         \begin{itemize}[<+->]
-            \item $x \in [i \cdot 2^W + \RNW, (i + 1) \cdot 2^W)$ for some $i < n$
+            \item $x \in [i \cdot 2^W, i \cdot 2^W + \RNW)$ for some $i < n$
             \item Applying $x \Mod 2^W$ to any $i$\textsuperscript{th} interval yields \onslide<+->{\begin{align*}\everymath{} % Allows specific coloring
                 \overbrace{\ER{\underbrace{0,1,\ldots,\RNW - 1}_{\text{rejected part}}},\underbrace{\RNW,\ldots,n,\ldots,2^W - 1}_{\text{restricted $i$\textsuperscript{th} interval}}}^{\text{$2^W$ values}}
             \end{align*}}
