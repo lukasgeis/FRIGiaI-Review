@@ -83,32 +83,28 @@
     \begin{itemize}[<+->]
         \item Consider the \GB{binary} representation of $n$: \onslide<+->{\begin{align*}\everymath{}
             n \quad \xrightarrow{\text{binary}} \qquad \underbrace{
-                \overbrace{0}^{
-                    \hidewidth 2^{W - 1} \hidewidth 
+                \overarrow{
+                    2^{W - 1}
                 },\ldots,0
-            }_{\text{only $0$'s}},\ER{\overbrace{1}^{
+            }_{\text{only $0$'s}},\ER{\overarrow[1]{
                  2^{\lfloor\log_2n\rfloor}
             }},\underbrace{
-                \nicefrac{0}{1},\ldots,\overbrace{
-                    \nicefrac{0}{1}
-                }^{ 2^1 },\overbrace{
-                    \nicefrac{0}{1}
-                }^{ 2^0 }
-            }_{\text{series of $0$'s and $1$'s}}
+                1,\ldots,\overarrow[
+                    0
+                ]{ 2^1 },\overarrow[
+                    1
+                ]{ 2^0 }
+            }_{\substack{\text{series of $0$'s} \\ \text{and $1$'s}}}
         \end{align*}} 
         \item Every number $x \leq n$ only needs the last $\lfloor\log_2n\rfloor + 1$ bits
         \item Get these bits with a bitwise-\textsc{And} with \begin{align*}\everymath{}
             2^{\lfloor\log_2n\rfloor + 1} - 1 \quad \xrightarrow{\text{binary}} \qquad \underbrace{
-                \overbrace{0}^{
+                \overarrow{
                     \hidewidth 2^{W - 1} \hidewidth 
                 },\ldots,0
-            }_{\text{only $0$'s}},\underbrace{\ER{\overbrace{1}^{
+            }_{\text{only $0$'s}},\underbrace{\ER{\overarrow[1]{
                  2^{\lfloor\log_2n\rfloor}
-            }},1,\ldots,\overbrace{
-                    1
-                }^{ 2^1 },\overbrace{
-                    1
-                }^{ 2^0 }
+            }},1,\ldots,\overarrow[1]{ 2^1 },\overarrow[1]{ 2^0 }
             }_{\text{only $1$'s}}
         \end{align*}
     \end{itemize}
@@ -120,18 +116,18 @@
         \item How can we compute $2^{\lfloor\log_2n\rfloor + 1}$? 
         \item \GB{Count} the number $\ell$ of \GB{leading $0$'s} in $n$! \onslide<+->{\begin{align*}\everymath{}
             n \quad \xrightarrow{\text{binary}} \qquad \underbrace{
-                \overbrace{0}^{
+                \overarrow{
                     \hidewidth 2^{W - 1} \hidewidth 
                 },\ldots,0
-            }_{\text{$\ell$ $0$'s}},\ER{\overbrace{1}^{
+            }_{\text{$\ell$ $0$'s}},\ER{\overarrow[1]{
                  2^{\lfloor\log_2n\rfloor}
             }},\underbrace{
-                \nicefrac{0}{1},\ldots,\overbrace{
-                    \nicefrac{0}{1}
-                }^{ 2^1 },\overbrace{
-                    \nicefrac{0}{1}
-                }^{ 2^0 }
-            }_{\text{series of $0$'s and $1$'s}}
+                1,\ldots,\overarrow[
+                    0
+                ]{ 2^1 },\overarrow[
+                    1
+                ]{ 2^0 }
+            }_{\substack{\text{series of $0$'s} \\ \text{and $1$'s}}}
         \end{align*}} 
         \item $\ER{\lfloor\log_2n\rfloor} = W - \ell - 1$ \onslide<+->{$\qquad \longrightarrow \qquad 2^{\lfloor\log_2n\rfloor + 1} = 1 \ll \left(W - \ell\right)$}
         \item Algorithm: \begin{itemize}[<+->]

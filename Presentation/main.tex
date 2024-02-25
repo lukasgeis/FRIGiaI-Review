@@ -11,7 +11,7 @@
 \newcommand{\DG}[1]{\textcolor{dunkelgruen}{#1}}
 \newcommand{\BB}[1]{\textcolor{black}{#1}}
 
-\newcommand{\RNW}{\ensuremath{\mathcal{R}_n^W}}
+\newcommand{\RNW}{\ensuremath{\mathcal{R}}}
 
 \usepackage{array}
 \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}} % Centered Multilines
@@ -30,12 +30,24 @@
 \tikzset{
 	legend/.style = {font=\boldmath, align=left},
 	every path/.style = {line width=.57mm, line cap=round},
+	time/.style={very thick,|-latex, gray},
+	int/.style={ultra thick,{|[scale=.5]}-{|[scale=.5]}},
 }
 
 \tikzstyle{overbrace text style}=[font=\small, above, pos=.5, yshift=3mm]
 \tikzstyle{overbrace style}=[decorate,decoration={brace,raise=2mm,amplitude=3pt}]
 \tikzstyle{underbrace style}=[decorate,decoration={brace,raise=2mm,amplitude=3pt,mirror},color=gray]
 \tikzstyle{underbrace text style}=[font=\small, below, pos=.5, yshift=-3mm]
+
+
+\usepackage{xparse}
+
+% Thanks to `https://tex.stackexchange.com/questions/8720/overbrace-underbrace-but-with-an-arrow-instead`
+\renewcommand{\arraystretch}{0.7}
+\NewDocumentCommand{\overarrow}{O{0} O{\big\downarrow} m}{%
+  \overset{\makebox[0pt]{\begin{tabular}{@{}c@{}}$#3$\\[0pt]\ensuremath{#2}\\[0pt]\hfil\end{tabular}}}{#1}
+}
+
 
 \usepackage{cancel}
 
