@@ -51,6 +51,11 @@
 
 \usepackage{cancel}
 
+% Toggle Bitmask in Unbiased/Supplementary
+\newif\ifbitm
+\bitmfalse
+
+
 \subject{Seminar Algorithms for Big Data}
 \title{Fast Random Integer Generation in an Interval}
 \subtitle{Based on a paper of the same title by Daniel Lemire}
@@ -74,7 +79,17 @@
 
 	\include{unbiased}
 
+\ifbitm
+	\subsection{The Bitmask Algorithm}\label{sec:2.3}
+	\include{bitmask}
+\fi
+
 	\include{lemire}
 
 	\include{conclusion}
+
+\ifbitm \else 
+	\include{bitmask}
+\fi
+
 \end{document}
